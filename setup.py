@@ -1,0 +1,18 @@
+from setuptools import setup, find_packages
+
+
+setup(
+    name='trunity_importer',
+    version='0.1',
+    packages=find_packages(),
+    scripts=['trunity_migrator/bin/trunity-importer'],
+    install_requires=[
+        'beautifulsoup4',
+        'trunity-3-client>=0.6',
+      ],
+    url='',
+    license='MIT',
+    author='hunting',
+    author_email='VicHunting@yandex.ua',
+    description='Library for importing content from various sources to Trunity 3 LMS.'
+)
