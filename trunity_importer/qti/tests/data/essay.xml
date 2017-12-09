@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd"
+	identifier="res_-CGM_CA15E_CAR_G04PSY_034" title="-CGM_CA15E_CAR_G04PSY_034" adaptive="false" timeDependent="false">
+   <responseDeclaration baseType="string" cardinality="single" identifier="RESPONSE"/>
+<outcomeDeclaration identifier="FEEDBACK" cardinality="single" baseType="identifier"/>
+<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
+<itemBody>
+		<extendedTextInteraction responseIdentifier="RESPONSE" expectedLength="600">
+		<prompt>
+			Question <b>text</b>
+		</prompt>
+	</extendedTextInteraction>
+</itemBody>
+
+</assessmentItem>

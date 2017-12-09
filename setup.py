@@ -7,6 +7,7 @@ setup(
     packages=find_packages(),
     scripts=['trunity_migrator/bin/trunity-importer'],
     install_requires=[
+        'lxml',
         'beautifulsoup4',
         'trunity-3-client>=0.6',
       ],

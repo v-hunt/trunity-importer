@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd"
+                identifier="res_-JY_NS17E_OA_G05U01L00D05S01_017" title="-JY_NS17E_OA_G05U01L00D05S01_017" adaptive="false" timeDependent="false">
+    <responseDeclaration baseType="identifier" cardinality="single" identifier="RESPONSE">
+        <correctResponse>
+            <value>A3</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="FEEDBACK" cardinality="single" baseType="identifier"/>
+    <outcomeDeclaration identifier="MAXSCORE" cardinality="single" baseType="integer"/>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="integer" />
+    <itemBody><div>Question <b>text</b></div>
+        <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
+            <simpleChoice identifier="A1">Answer 1</simpleChoice>
+            <simpleChoice identifier="A2">Answer 2</simpleChoice>
+            <simpleChoice identifier="A3">Answer 3</simpleChoice>
+            <simpleChoice identifier="A4">Answer 4</simpleChoice>
+        </choiceInteraction><rubricBlock view="scorer"><p>A4</p></rubricBlock>
+    </itemBody>
+    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>

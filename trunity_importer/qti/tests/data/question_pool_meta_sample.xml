@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentTest xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd"
+    identifier="res_-JY_NS17E_OA_G05U01L00D05RCT_000" title="Questionnaire Title">
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <testPart identifier="tp_-JY_NS17E_OA_G05U01L00D05RCT_000_1" navigationMode="linear" submissionMode="individual">
+        <itemSessionControl maxAttempts="2"/>
+        <assessmentSection identifier="as_-JY_NS17E_OA_G05U01L00D05RCT_000_1_1" title="Section 1" visible="false">
+		<assessmentItemRef identifier="res_-JY_NS17E_OA_G05U01L00D05RCT_001" href="question_1.xml">
+                <weight identifier="W_-JY_NS17E_OA_G05U01L00D05RCT_001" value="1"/>
+            </assessmentItemRef>
+			<assessmentItemRef identifier="res_-JY_NS17E_OA_G05U01L00D05RCT_002" href="question_2.xml">
+                <weight identifier="W_-JY_NS17E_OA_G05U01L00D05RCT_002" value="1"/>
+            </assessmentItemRef>
+			<assessmentItemRef identifier="res_-JY_NS17E_OA_G05U01L00D05RCT_003" href="question_3.xml">
+                <weight identifier="W_-JY_NS17E_OA_G05U01L00D05RCT_003" value="1"/>
+            </assessmentItemRef>
+			<assessmentItemRef identifier="res_-JY_NS17E_OA_G05U01L00D05RCT_004" href="question_4.xml">
+                <weight identifier="W_-JY_NS17E_OA_G05U01L00D05RCT_004" value="1"/>
+            </assessmentItemRef>
+			</assessmentSection>
+    </testPart>
+    <outcomeProcessing>
+        <setOutcomeValue identifier="SCORE">
+            <divide>
+                <sum>
+                    <testVariables variableIdentifier="SCORE"/>
+                </sum>
+                <baseValue baseType="float">22</baseValue>
+            </divide>
+        </setOutcomeValue>
+    </outcomeProcessing>
+</assessmentTest>

@@ -1,0 +1,183 @@
+from typing import List
+from abc import ABC
+
+from bs4 import BeautifulSoup
+
+from trunity_3_client.builders import Answer
+
+
+class QuestionType:
+    MULTIPLE_ANSWER = 'multiple_answer'
+    MULTIPLE_CHOICE = 'multiple_choice'
+    ESSAY = 'essay'
+
+
+class AbstractQuestionnaireParser(ABC):
+
+    def __init__(self, soup: BeautifulSoup):
+        self._soup = soup
+
+    @classmethod
+    def from_xml(cls, xml: str):
+        soup = BeautifulSoup(xml, "xml")
+        return cls(soup)
+
+
+class QuestionnaireMetaInfoParser(AbstractQuestionnaireParser):
+
+    def get_questionnaire_title(self) -> str:
+        return self._soup.find('assessmentTest')['title']
+
+    def get_section_title(self) -> str:
+        return self._soup.testPart.assessmentSection['title']
+
+    def get_file_names(self) -> List[str]:
+        return [
+            tag['href'] for tag in
+            self._soup.testPart.find_all("assessmentItemRef")
+        ]
+
+
+class MultipleChoiceParser(AbstractQuestionnaireParser):
+
+    def get_text(self) -> str:
+        return self._soup.itemBody.div.decode_contents().strip()
+
+    def get_answers(self) -> List[Answer]:
+
+        answers = []
+        correct_identifier = self._soup.correctResponse.value.text
+
+        for tag in self._soup.itemBody.find_all('simpleChoice'):
+            text = tag.text.strip()
+            correct = True if tag['identifier'] == correct_identifier else False
+            score = 1 if tag['identifier'] == correct_identifier else 0
+
+            answers.append(
+                Answer(text, correct, score)
+            )
+
+        return answers
+
+
+class MultipleAnswerParser(AbstractQuestionnaireParser):
+
+    def get_text(self) -> str:
+        return self._soup.choiceInteraction.prompt.decode_contents().strip()
+
+    def get_answers(self) -> List[Answer]:
+        answers = []
+        correct_identifiers = [
+            tag.text for tag in self._soup.correctResponse.find_all("value")
+        ]
+
+        for tag in self._soup.itemBody.find_all('simpleChoice'):
+            text = tag.text.strip()
+            correct = True if tag['identifier'] in correct_identifiers else False
+            score = 1 if tag['identifier'] in correct_identifiers else 0
+
+            answers.append(
+                Answer(text, correct, score)
+            )
+
+        return answers
+
+
+class EssayParser(AbstractQuestionnaireParser):
+
+    def get_text(self) -> str:
+        return self._soup.itemBody.prompt.decode_contents().strip()
+
+
+class UnknownQuestionTypeError(ValueError):
+    """
+    Raise when question type is unknown or parser is not yet implemented
+    """
+    pass
+
+
+class Question(object):
+    """
+    Main parser class for xml questions.
+    """
+
+    def __init__(self, soup: BeautifulSoup):
+        self._soup = soup
+        self._question_type = self._get_question_type()
+
+        self._parser = None
+
+    @classmethod
+    def from_xml(cls, xml: str):
+        soup = BeautifulSoup(xml, "xml")
+        return cls(soup)
+
+    @property
+    def type(self):
+        return self._question_type
+
+    @property
+    def parser(self):
+        if not self._parser:
+            return self._get_question_parser_instance()
+
+        else:
+            return self._parser
+
+    def __check_essay_type(self) -> bool:
+        is_essay = False
+
+        if self._soup.find("extendedTextInteraction"):
+            is_essay = True
+
+        return is_essay
+
+    def __check_multiple_choice_type(self) -> bool:
+        is_multiple_choice = False
+
+        if self._soup.find("simpleChoice") and \
+                self._soup.responseDeclaration['cardinality'] == 'single':
+            is_multiple_choice = True
+
+        return is_multiple_choice
+
+    def __check_multiple_answer_type(self) -> bool:
+        is_multiple_answer = False
+
+        if self._soup.find("simpleChoice") and \
+                self._soup.responseDeclaration['cardinality'] == 'multiple':
+            is_multiple_answer = True
+
+        return is_multiple_answer
+
+    def _get_question_type(self) -> str:
+
+        if self.__check_essay_type():
+            return QuestionType.ESSAY
+
+        elif self.__check_multiple_choice_type():
+            return QuestionType.MULTIPLE_CHOICE
+
+        elif self.__check_multiple_answer_type():
+            return QuestionType.MULTIPLE_ANSWER
+
+        else:
+            raise UnknownQuestionTypeError(
+                "Question type is unknown or parser is not yet implemented!"
+            )
+
+    def _get_question_parser_instance(self):
+
+        parsers = {
+            QuestionType.MULTIPLE_CHOICE: MultipleChoiceParser,
+            QuestionType.MULTIPLE_ANSWER: MultipleAnswerParser,
+            QuestionType.ESSAY: EssayParser,
+        }
+
+        try:
+            return parsers[self.type](self._soup)
+
+        except KeyError:
+            raise UnknownQuestionTypeError(
+                "Question type is unknown or parser is not yet implemented!"
+            )

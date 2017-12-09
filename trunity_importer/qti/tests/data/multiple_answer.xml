@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd"
+                identifier="res_-CGM_CA15E_CAR_G04CH6_013" title="-CGM_CA15E_CAR_G04CH6_013" adaptive="false" timeDependent="false">
+    <responseDeclaration baseType="identifier" cardinality="multiple" identifier="RESPONSE">
+        <correctResponse>
+            <value>option_2</value>
+            <value>option_3</value>
+            <value>option_4</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="FEEDBACK" cardinality="single" baseType="identifier"/>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
+    <outcomeDeclaration identifier="MAXSCORE" cardinality="single" baseType="float">
+    </outcomeDeclaration>
+    <itemBody>
+        <choiceInteraction responseIdentifier="RESPONSE" shuffle="true" maxChoices="0">
+            <prompt>
+                Question <b>text</b>
+
+            </prompt>
+            <simpleChoice identifier="option_1" fixed="false">Answer 1</simpleChoice>
+            <simpleChoice identifier="option_2" fixed="false">Answer 2</simpleChoice>
+            <simpleChoice identifier="option_3" fixed="false">Answer 3</simpleChoice>
+            <simpleChoice identifier="option_4" fixed="false">Answer 4</simpleChoice>
+        </choiceInteraction></itemBody>
+    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
