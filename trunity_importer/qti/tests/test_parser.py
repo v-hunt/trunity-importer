@@ -213,7 +213,6 @@ class QuestionTestCase(TestCase):
 
     def test_type_is_multiple_choice(self):
         question = Question.from_xml(self.multiple_choice_xml)
-        print('Type: ', question.type)
 
         self.assertEqual(
             question.type,
