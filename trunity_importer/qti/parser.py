@@ -41,14 +41,28 @@ class ManifestParser(AbstractQuestionnaireParser):
 
 
 class QuestionnaireMetaInfoParser(AbstractQuestionnaireParser):
+    """
+    Parser for xml file with questionnaire meta information.
+    ('-CGM_CA15E_CAR_G04EYT_006.xml', '-JY_NS17E_OA_G05U01L01D05S00_000.xml' etc.)
+
+    You can get list of such files from ManifestParser.
+    """
 
     def get_questionnaire_title(self) -> str:
         return self._soup.find('assessmentTest')['title']
 
     def get_section_title(self) -> str:
+        """
+        Section title. Should be chapter title the current questionnaire
+        belongs to.
+        """
         return self._soup.testPart.assessmentSection['title']
 
     def get_file_names(self) -> List[str]:
+        """
+        Return list of xml files with questions
+        ('-CGM_CA15E_CAR_G04EYT_006.xml' for instance)
+        """
         return [
             tag['href'] for tag in
             self._soup.testPart.find_all("assessmentItemRef")
