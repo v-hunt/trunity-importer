@@ -23,6 +23,23 @@ class AbstractQuestionnaireParser(ABC):
         return cls(soup)
 
 
+class ManifestParser(AbstractQuestionnaireParser):
+    """
+    Parser for imsmanifest.xml file.
+    """
+
+    def get_questionnaire_files(self) -> List[str]:
+        """
+        Get list of files with questionnaire meta information for further
+        parsing within QuestionnaireMetaInfoParser class.
+        """
+        resource_tags = self._soup.find_all("resource")
+        questionnaire_resourse_tags = [tag for tag in resource_tags if tag.find("dependency")]
+        return [tag['href'] for tag in questionnaire_resourse_tags]
+
+
+
+
 class QuestionnaireMetaInfoParser(AbstractQuestionnaireParser):
 
     def get_questionnaire_title(self) -> str:

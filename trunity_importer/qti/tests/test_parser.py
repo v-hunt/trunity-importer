@@ -4,6 +4,7 @@ import os
 from trunity_3_client.builders import Answer
 
 from trunity_importer.qti.parser import (
+    ManifestParser,
     QuestionnaireMetaInfoParser,
     MultipleChoiceParser,
     MultipleAnswerParser,
@@ -17,6 +18,61 @@ DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir
     'data'
 )
+
+
+class ImsmanifestParserTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        assert os.path.isdir(DATA_DIR), "Data directory isn't exist!"
+
+        with open(
+            os.path.join(DATA_DIR, 'insmanifest.xml')
+        ) as fo:
+            insmanifest_xml = fo.read()
+
+        cls.parser = ManifestParser.from_xml(insmanifest_xml)
+
+    def test_get_questionnaire_files(self):
+        self.assertListEqual(
+            self.parser.get_questionnaire_files(),
+            ['testitems/-CGM_CA15E_CAR_G04BYT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH1.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH10.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH10PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH11.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH11PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH12.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH12PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH13.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH13PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH1PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH2.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH2PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH3.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH3PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH4.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH4PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH5.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH5PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH6.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH6PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH7.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH7PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH8.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH8PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH9.xml',
+             'testitems/-CGM_CA15E_CAR_G04CH9PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04EYT.xml',
+             'testitems/-CGM_CA15E_CAR_G04GRTL_1_11.xml',
+             'testitems/-CGM_CA15E_CAR_G04GRTL_12_20.xml',
+             'testitems/-CGM_CA15E_CAR_G04MYT.xml',
+             'testitems/-CGM_CA15E_CAR_G04PSY.xml',
+             'testitems/-CGM_CA15E_CAR_G04U1PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04U2PT.xml',
+             'testitems/-CGM_CA15E_CAR_G04U3PT.xml']
+
+        )
 
 
 class QuestionnaireMetaInfoParserTestCase(TestCase):
