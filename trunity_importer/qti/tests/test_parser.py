@@ -189,6 +189,13 @@ class EssayParserTestCase(TestCase):
             "Question <b>text</b>"
         )
 
+    def test_get_correct_answer(self):
+
+        self.assertEqual(
+            self.parser.get_correct_answer(),
+            "<p>Feedback (correct answer)</p>"
+        )
+
 
 class QuestionTestCase(TestCase):
     """

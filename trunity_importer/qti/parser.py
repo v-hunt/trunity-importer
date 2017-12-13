@@ -119,6 +119,9 @@ class EssayParser(AbstractQuestionnaireParser):
     def get_text(self) -> str:
         return self._soup.itemBody.prompt.decode_contents().strip()
 
+    def get_correct_answer(self):
+        return self._soup.itemBody.rubricBlock.decode_contents().strip()
+
 
 class UnknownQuestionTypeError(ValueError):
     """

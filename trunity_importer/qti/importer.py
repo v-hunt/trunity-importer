@@ -74,7 +74,7 @@ class Importer(object):
 
                 questionnaire.add_essay(
                     text=question.parser.get_text(),
-                    correct_answer="",  # we have no answer for essays in xml
+                    correct_answer=question.parser.get_correct_answer(),
                     score=1,
                 )
 

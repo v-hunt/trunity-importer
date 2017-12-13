@@ -12,6 +12,9 @@
 			Question <b>text</b>
 		</prompt>
 	</extendedTextInteraction>
+	<rubricBlock view="scorer">
+		<p>Feedback (correct answer)</p>
+	</rubricBlock>
 </itemBody>
 
 </assessmentItem>
