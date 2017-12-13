@@ -120,7 +120,13 @@ class EssayParser(AbstractQuestionnaireParser):
         return self._soup.itemBody.prompt.decode_contents().strip()
 
     def get_correct_answer(self):
-        return self._soup.itemBody.rubricBlock.decode_contents().strip()
+        correct_answer = ''
+
+        rubrick_block_tag = self._soup.itemBody.rubricBlock
+        if rubrick_block_tag:
+            correct_answer=rubrick_block_tag.decode_contents().strip()
+
+        return correct_answer
 
 
 class UnknownQuestionTypeError(ValueError):
