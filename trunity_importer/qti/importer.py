@@ -4,7 +4,8 @@ from trunity_3_client.clients.auth import initialize_session_from_creds
 from trunity_3_client.clients.endpoints import (
     ContentsClient,
     ContentType,
-    ResourceType
+    ResourceType,
+    TopicsClient,
 )
 from trunity_3_client.builders import Questionnaire
 
@@ -17,12 +18,13 @@ from trunity_importer.qti.parser import (
 )
 
 
-def create_qst_pool(session, site_id, content_title):
+def create_qst_pool(session, site_id, content_title, topic_id=None):
     cnt_client = ContentsClient(session)
     return cnt_client.list.post(
         site_id=site_id,
         content_title=content_title,
         content_type=ContentType.QUESTIONNAIRE,
+        topic_id=topic_id,
         resource_type=ResourceType.QUESTION_POOL,
     )
 
@@ -39,6 +41,12 @@ class Importer(object):
         self._zip_file = ZipFile(path_to_zip)
         self.t3_session = initialize_session_from_creds(username, password)
 
+        # key: topic_title, value: topic_id
+        self._topics = {}
+        self._cur_topic_id = None
+
+        self._topic_client = TopicsClient(self.t3_session)
+
         # we need json content type for uploading questionnaires:
         self.t3_json_session = initialize_session_from_creds(
             username, password, content_type='application/json')
@@ -48,6 +56,12 @@ class Importer(object):
 
         meta_info = QuestionnaireMetaInfoParser.from_xml(questionnaire_meta_xml)
         topic = meta_info.get_section_title()  # TODO: implement creating topics
+
+        if topic not in self._topics:
+            print("Creating new topic: {}".format(topic), end='')
+            self._cur_topic_id = self._topic_client.list.post(self._book_id, topic)
+            self._topics[topic] = self._cur_topic_id
+            print('\t\t Done!')
 
         # xml files with questions for questionnaire:
         question_xml_files = meta_info.get_file_names()
@@ -82,7 +96,8 @@ class Importer(object):
 
         questionnaire_id = create_qst_pool(
             self.t3_session, self._book_id,
-            content_title=meta_info.get_questionnaire_title()
+            content_title=meta_info.get_questionnaire_title(),
+            topic_id=self._cur_topic_id,
         )
         questionnaire.upload(questionnaire_id)
 
