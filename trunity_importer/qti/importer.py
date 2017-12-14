@@ -6,6 +6,7 @@ from trunity_3_client.clients.endpoints import (
     ContentType,
     ResourceType,
     TopicsClient,
+    FilesClient,
 )
 from trunity_3_client.builders import Questionnaire
 
@@ -16,6 +17,7 @@ from trunity_importer.qti.parser import (
     ManifestParser,
     QuestionnaireMetaInfoParser,
 )
+from bs4 import BeautifulSoup
 
 
 def create_qst_pool(session, site_id, content_title, topic_id=None):
@@ -46,10 +48,22 @@ class Importer(object):
         self._cur_topic_id = None
 
         self._topic_client = TopicsClient(self.t3_session)
+        self._files_client = FilesClient(self.t3_session)
 
         # we need json content type for uploading questionnaires:
         self.t3_json_session = initialize_session_from_creds(
             username, password, content_type='application/json')
+
+    def _upload_images(self, question_soup: BeautifulSoup):
+        """
+        Upload all images to Trunity and replace src attributes with new urls.
+        """
+        for img in question_soup.find_all("img"):
+            file_obj = self._zip_file.open('testitems/' + img['src'])
+            cdn_file_url = self._files_client.list.post(file_obj=file_obj)
+            img['src'] = cdn_file_url
+
+        return question_soup
 
     def _import_question_pool(self, questionnaire_meta_xml: str):
         questionnaire = Questionnaire(self.t3_json_session)
@@ -69,6 +83,7 @@ class Importer(object):
         for xml_file in question_xml_files:  # TODO: extract it
             xml = self._zip_file.open('testitems/' + xml_file)
             question = Question.from_xml(xml)
+            question._soup = self._upload_images(question._soup)
 
             if question.type == QuestionType.MULTIPLE_CHOICE:
 
