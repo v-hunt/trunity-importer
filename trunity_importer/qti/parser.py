@@ -202,6 +202,8 @@ class Question(object):
             return QuestionType.MULTIPLE_ANSWER
 
         else:
+            print('Unknown question type. XML:')
+            print(str(self._soup))
             raise UnknownQuestionTypeError(
                 "Question type is unknown or parser is not yet implemented!"
             )
