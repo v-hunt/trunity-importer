@@ -80,7 +80,7 @@ class MultipleChoiceParser(AbstractQuestionnaireParser):
         correct_identifier = self._soup.correctResponse.value.text
 
         for tag in self._soup.itemBody.find_all('simpleChoice'):
-            text = tag.text.strip()
+            text = tag.decode_contents().strip()
             correct = True if tag['identifier'] == correct_identifier else False
             score = 1 if tag['identifier'] == correct_identifier else 0
 
@@ -103,7 +103,7 @@ class MultipleAnswerParser(AbstractQuestionnaireParser):
         ]
 
         for tag in self._soup.itemBody.find_all('simpleChoice'):
-            text = tag.text.strip()
+            text = tag.decode_contents().strip()
             correct = True if tag['identifier'] in correct_identifiers else False
             score = 1 if tag['identifier'] in correct_identifiers else 0
 

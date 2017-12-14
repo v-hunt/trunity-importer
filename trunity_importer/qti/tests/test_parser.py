@@ -164,8 +164,8 @@ class MultipleAnswerParserTestCase(TestCase):
             [
                 Answer('Answer 1', False, 0),
                 Answer('Answer 2', True, 1),
-                Answer('Answer 3', True, 1),
-                Answer('Answer 4', True, 1),
+                Answer('<b>Answer 2</b>', True, 1),
+                Answer('<b>Answer 2</b>', True, 1),
             ]
         )
 

@@ -9,7 +9,7 @@ setup(
     install_requires=[
         'lxml',
         'beautifulsoup4',
-        'trunity-3-client>=0.6',
+        'trunity-3-client>=0.6.1',
       ],
     url='',
     license='MIT',

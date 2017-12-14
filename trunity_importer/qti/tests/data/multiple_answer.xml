@@ -22,8 +22,8 @@
             </prompt>
             <simpleChoice identifier="option_1" fixed="false">Answer 1</simpleChoice>
             <simpleChoice identifier="option_2" fixed="false">Answer 2</simpleChoice>
-            <simpleChoice identifier="option_3" fixed="false">Answer 3</simpleChoice>
-            <simpleChoice identifier="option_4" fixed="false">Answer 4</simpleChoice>
+            <simpleChoice identifier="option_3" fixed="false"><b>Answer 2</b></simpleChoice>
+            <simpleChoice identifier="option_4" fixed="false"><b>Answer 2</b></simpleChoice>
         </choiceInteraction></itemBody>
     <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
 </assessmentItem>
