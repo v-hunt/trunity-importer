@@ -10,6 +10,7 @@ class QuestionType:
     MULTIPLE_ANSWER = 'multiple_answer'
     MULTIPLE_CHOICE = 'multiple_choice'
     ESSAY = 'essay'
+    SHORT_ANSWER = 'short_answer'
 
 
 class AbstractQuestionnaireParser(ABC):
@@ -114,6 +115,20 @@ class MultipleAnswerParser(AbstractQuestionnaireParser):
         return answers
 
 
+class ShortAnswerParser(AbstractQuestionnaireParser):
+
+    def get_text(self) -> str:
+        return self._soup.itemBody.div.decode_contents().strip()
+
+    def get_answer(self) -> Answer:
+
+        return Answer(
+            text=self._soup.correctResponse.value.text.strip(),
+            correct=True,
+            score=1,
+        )
+
+
 class EssayParser(AbstractQuestionnaireParser):
 
     def get_text(self) -> str:
@@ -190,6 +205,13 @@ class Question(object):
 
         return is_multiple_answer
 
+    def __check_short_answer(self) -> bool:
+        is_short_answer = False
+
+        if self._soup.find("textEntryInteraction"):
+            is_short_answer = True
+        return is_short_answer
+
     def _get_question_type(self) -> str:
 
         if self.__check_essay_type():
@@ -200,6 +222,9 @@ class Question(object):
 
         elif self.__check_multiple_answer_type():
             return QuestionType.MULTIPLE_ANSWER
+
+        elif self.__check_short_answer():
+            return  QuestionType.SHORT_ANSWER
 
         else:
             print('Unknown question type. XML:')
@@ -214,6 +239,7 @@ class Question(object):
             QuestionType.MULTIPLE_CHOICE: MultipleChoiceParser,
             QuestionType.MULTIPLE_ANSWER: MultipleAnswerParser,
             QuestionType.ESSAY: EssayParser,
+            QuestionType.SHORT_ANSWER: ShortAnswerParser,
         }
 
         try:

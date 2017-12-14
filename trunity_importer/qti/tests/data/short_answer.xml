@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assessmentItem adaptive="false" identifier="res_-CGM_CA15E_CAR_G04CH13_006"
+                timeDependent="false" title="-CGM_CA15E_CAR_G04CH13_006"
+                xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd">
+    <responseDeclaration baseType="string" cardinality="single"
+                         identifier="RESPONSE">
+        <correctResponse>
+            <value>10</value>
+        </correctResponse>
+        <mapping defaultValue="0">
+            <mapEntry caseSensitive="false" mapKey="10" mappedValue="1"/>
+            <mapEntry caseSensitive="false" mapKey="10" mappedValue="1"/>
+            <mapEntry caseSensitive="false" mapKey="10" mappedValue="1"/>
+            <mapEntry caseSensitive="false" mapKey="10" mappedValue="1"/>
+            <mapEntry caseSensitive="false" mapKey="10" mappedValue="1"/>
+        </mapping>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="identifier" cardinality="single"
+                        identifier="FEEDBACK"/>
+    <outcomeDeclaration baseType="float" cardinality="single"
+                        identifier="SCORE"/>
+    <outcomeDeclaration baseType="float" cardinality="single"
+                        identifier="MAXSCORE">
+        <defaultValue>
+            <value>1</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <itemBody>
+        <div>
+            Question <b>text</b>
+
+        </div>
+        <p>
+            <textEntryInteraction expectedLength="11"
+                                  responseIdentifier="RESPONSE"/>
+        </p>
+    </itemBody>
+    <responseProcessing
+            template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/CC2_map_response"/>
+</assessmentItem>

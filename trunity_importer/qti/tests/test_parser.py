@@ -8,6 +8,7 @@ from trunity_importer.qti.parser import (
     QuestionnaireMetaInfoParser,
     MultipleChoiceParser,
     MultipleAnswerParser,
+    ShortAnswerParser,
     EssayParser,
     QuestionType,
     Question,
@@ -170,6 +171,33 @@ class MultipleAnswerParserTestCase(TestCase):
         )
 
 
+class ShortAnswerParserTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        assert os.path.isdir(DATA_DIR), "Data directory isn't exist!"
+
+        with open(
+                os.path.join(DATA_DIR, 'short_answer.xml')) as fo:
+            question_xml = fo.read()
+
+        cls.parser = ShortAnswerParser.from_xml(question_xml)
+
+    def test_get_text(self):
+        self.assertEqual(
+            self.parser.get_text(),
+            "Question <b>text</b>"
+        )
+
+    def test_get_answer(self):
+
+        self.assertEqual(
+            self.parser.get_answer(),
+            Answer('10', True, 1),
+        )
+
+
+
 class EssayParserTestCase(TestCase):
 
     @classmethod
@@ -218,6 +246,10 @@ class QuestionTestCase(TestCase):
                 os.path.join(DATA_DIR, 'essay.xml')) as fo:
             cls.essay_xml = fo.read()
 
+        with open(
+                os.path.join(DATA_DIR, 'short_answer.xml')) as fo:
+            cls.short_answer_xml = fo.read()
+
     def test_type_is_multiple_choice(self):
         question = Question.from_xml(self.multiple_choice_xml)
 
@@ -245,6 +277,15 @@ class QuestionTestCase(TestCase):
             "Wrong question type!"
         )
 
+    def test_type_is_short_answer(self):
+        question = Question.from_xml(self.short_answer_xml)
+
+        self.assertEqual(
+            question.type,
+            QuestionType.SHORT_ANSWER,
+            "Wrong question type!"
+        )
+
     def test_parser_is_multiple_choice_parser(self):
         question = Question.from_xml(self.multiple_choice_xml)
 
@@ -261,7 +302,7 @@ class QuestionTestCase(TestCase):
             "Must be MultipleAnswerParser instance!"
         )
 
-    def test_parser_essay_parser(self):
+    def test_parser_is_essay_parser(self):
         question = Question.from_xml(self.essay_xml)
 
         self.assertTrue(
@@ -269,3 +310,10 @@ class QuestionTestCase(TestCase):
             "Must be EssayParser instance!"
         )
 
+    def test_parser_is_short_answer_parser(self):
+        question = Question.from_xml(self.short_answer_xml)
+
+        self.assertTrue(
+            isinstance(question.parser, ShortAnswerParser),
+            "Must be ShortAnswerParser instance!"
+        )
