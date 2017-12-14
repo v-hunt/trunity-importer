@@ -1,3 +1,4 @@
+import warnings
 from typing import List
 from abc import ABC
 
@@ -144,13 +145,6 @@ class EssayParser(AbstractQuestionnaireParser):
         return correct_answer
 
 
-class UnknownQuestionTypeError(ValueError):
-    """
-    Raise when question type is unknown or parser is not yet implemented
-    """
-    pass
-
-
 class Question(object):
     """
     Main parser class for xml questions.
@@ -227,11 +221,11 @@ class Question(object):
             return  QuestionType.SHORT_ANSWER
 
         else:
-            print('Unknown question type. XML:')
-            print(str(self._soup))
-            raise UnknownQuestionTypeError(
+            warnings.warn(
                 "Question type is unknown or parser is not yet implemented!"
             )
+            print('\tUnknown question type. XML:')
+            print(str(self._soup), end='\n\n')
 
     def _get_question_parser_instance(self):
 
@@ -246,6 +240,6 @@ class Question(object):
             return parsers[self.type](self._soup)
 
         except KeyError:
-            raise UnknownQuestionTypeError(
-                "Question type is unknown or parser is not yet implemented!"
+            warnings.warn(
+                "No parser for this question type!"
             )
