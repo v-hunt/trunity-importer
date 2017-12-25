@@ -11,7 +11,7 @@ from trunity_3_client.clients.endpoints import (
 from trunity_3_client.builders import Questionnaire
 
 
-from trunity_importer.qti.parser import (
+from trunity_importer.qti.parsers import (
     QuestionType,
     Question,
     ManifestParser,

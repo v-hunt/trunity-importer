@@ -3,7 +3,7 @@ import os
 
 from trunity_3_client.builders import Answer
 
-from trunity_importer.qti.parser import (
+from trunity_importer.qti.parsers import (
     ManifestParser,
     QuestionnaireMetaInfoParser,
     MultipleChoiceParser,
