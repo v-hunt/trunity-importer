@@ -40,8 +40,6 @@ class ManifestParser(AbstractQuestionnaireParser):
         return [tag['href'] for tag in questionnaire_resourse_tags]
 
 
-
-
 class QuestionnaireMetaInfoParser(AbstractQuestionnaireParser):
     """
     Parser for xml file with questionnaire meta information.
