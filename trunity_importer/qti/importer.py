@@ -2,9 +2,6 @@ from zipfile import ZipFile
 
 from trunity_3_client.clients.auth import initialize_session_from_creds
 from trunity_3_client.clients.endpoints import (
-    ContentsClient,
-    ContentType,
-    ResourceType,
     TopicsClient,
     FilesClient,
 )
@@ -19,16 +16,7 @@ from trunity_importer.qti.parsers import (
 )
 from bs4 import BeautifulSoup
 
-
-def create_qst_pool(session, site_id, content_title, topic_id=None):
-    cnt_client = ContentsClient(session)
-    return cnt_client.list.post(
-        site_id=site_id,
-        content_title=content_title,
-        content_type=ContentType.QUESTIONNAIRE,
-        topic_id=topic_id,
-        resource_type=ResourceType.QUESTION_POOL,
-    )
+from trunity_importer.utils import create_qst_pool
 
 
 class Importer(object):

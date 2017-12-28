@@ -2,8 +2,12 @@ import os
 from collections import namedtuple
 
 from requests import HTTPError
-from trunity_3_client import get_auth_token
-
+from trunity_3_client import (
+    get_auth_token,
+    ContentsClient,
+    ContentType,
+    ResourceType
+)
 
 ENVIRON_USERNAME = 'T3_USERNAME'
 ENVIRON_PASSWORD = 'T3_PWD'
@@ -37,3 +41,13 @@ def check_and_get_creds():
             os.environ[ENVIRON_PASSWORD] = username
             return CREDS(username, password)
 
+
+def create_qst_pool(session, site_id, content_title, topic_id=None):
+    cnt_client = ContentsClient(session)
+    return cnt_client.list.post(
+        site_id=site_id,
+        content_title=content_title,
+        content_type=ContentType.QUESTIONNAIRE,
+        topic_id=topic_id,
+        resource_type=ResourceType.QUESTION_POOL,
+    )
