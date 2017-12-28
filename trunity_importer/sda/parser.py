@@ -1,9 +1,7 @@
 import warnings
-from zipfile import ZipFile
 from typing import List
-from abc import ABC
 
-from bs4 import BeautifulSoup, CData, Tag
+from bs4 import BeautifulSoup, Tag
 
 from trunity_3_client.builders import Answer
 
@@ -54,4 +52,20 @@ class Parser(object):
         )
 
     def get_questions(self):
-        pass
+        for item in self._soup.find_all("item"):
+            if item['type'] == 'MultipleChoice':
+                type_ = QuestionType.MULTIPLE_CHOICE
+                question = self._get_multiple_choice(item)
+
+            elif item['type'] == 'TechnologyEnhanced':
+                # we ignore this type of questions as Trunity doesn't
+                # have the functionality at the moment.
+                pass
+
+            else:
+                warnings.warn(
+                    "Question type is unknown!"
+                )
+                print('\tUnknown question type: ', item['type'])
+
+            yield {'type': type_, 'question': question}

@@ -4,7 +4,7 @@ from unittest import TestCase
 from bs4 import BeautifulSoup
 from trunity_3_client.builders import Answer
 
-from trunity_importer.sda.parser import Parser
+from trunity_importer.sda.parser import Parser, QuestionType, MultipleChoice
 
 
 DATA_DIR = os.path.join(
@@ -49,3 +49,15 @@ class ParserTestCase(TestCase):
             "12345.mp3",
             "Wrong audio file for MultipleChoice question!"
         )
+
+    def test_get_questions(self):
+        parser = Parser(self.multiple_choice_xml)
+
+        for question in parser.get_questions():
+            self.assertEqual(
+                question['type'],
+                QuestionType.MULTIPLE_CHOICE,
+            )
+            self.assertTrue(
+                isinstance(question['question'], MultipleChoice),
+            )
