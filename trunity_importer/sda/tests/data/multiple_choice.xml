@@ -1,0 +1,123 @@
+   <item id="831087" item_code="765159177" type="MultipleChoice" project_id="1100" version="1" last_modification_date="3/12/2017 5:38:00 PM">
+      <item_text><![CDATA[<p>Text</p>]]></item_text>
+      <display_text><![CDATA[<p>Text</p>]]></display_text>
+      <distractors>
+        <distractor id="2773904" item_id="831087" is_correct="False" seq_no="1">
+          <rationale><![CDATA[<p>Feedback 1</p>]]></rationale>
+          <distractor_text><![CDATA[<p>Answer 1</p>]]></distractor_text>
+          <display_text><![CDATA[<p>Answer 1</p>]]></display_text>
+        </distractor>
+        <distractor id="2773905" item_id="831087" is_correct="True" seq_no="2">
+          <rationale><![CDATA[<p>Feedback 2</p>]]></rationale>
+          <distractor_text><![CDATA[<p>Answer 2</p>]]></distractor_text>
+          <display_text><![CDATA[<p>Answer 2</p>]]></display_text>
+        </distractor>
+        <distractor id="2773903" item_id="831087" is_correct="False" seq_no="3">
+          <rationale><![CDATA[<p>Feedback 3</p>]]></rationale>
+          <distractor_text><![CDATA[<p>Answer 3</p>]]></distractor_text>
+          <display_text><![CDATA[<p>Answer 3</p>]]></display_text>
+        </distractor>
+      </distractors>
+
+       <alignments>
+        <alignment id="894159" is_primary="False" category_group_id="543" grade="1" state="National">
+          <group_description>Next Generation Science Standards - Arranged By Disciplinary Core Idea - 2013 K-12</group_description>
+          <category id="1052909" group_id="543" level="1" project_id="1100">
+            <level_name>Level 1</level_name>
+            <category_text>Achieve</category_text>
+          </category>
+          <category id="1052910" group_id="543" level="2" project_id="1100">
+            <level_name>Level 2</level_name>
+            <category_text>Arranged by Disciplinary Core Idea (DCI)</category_text>
+          </category>
+          <category id="1052911" group_id="543" level="3" project_id="1100">
+            <level_name>Level 3</level_name>
+            <category_text>Science (2013)</category_text>
+          </category>
+          <category id="1052928" group_id="543" level="4" project_id="1100">
+            <level_name>Level 4</level_name>
+            <category_text>Grade 1</category_text>
+          </category>
+          <category id="1052934" group_id="543" level="5" project_id="1100" guid="70581B36-A3EA-11E2-9CD2-C3759DFF4B22">
+            <level_name>Level 5</level_name>
+            <category_text>1-LS1 From Molecules to Organisms: Structures and Processes</category_text>
+          </category>
+          <category id="1052935" group_id="543" level="6" project_id="1100" guid="705889B8-A3EA-11E2-9CD2-C3759DFF4B22">
+            <level_name>Level 6</level_name>
+            <category_text>1-LS1-1 Use materials to design a solution to a human problem by mimicking how plants and/or animals use their external parts to help them survive, grow, and meet their needs.</category_text>
+          </category>
+        </alignment>
+        <alignment id="956770" is_primary="True" category_group_id="675" grade="1" state="-">
+          <group_description>NT - Next Generation Science Standards - DCI (2015) – K-12</group_description>
+          <category id="1129395" group_id="675" level="1" project_id="1100">
+            <level_name>Level 1</level_name>
+            <category_text>NGSS DCI (2015)</category_text>
+          </category>
+          <category id="1129396" group_id="675" level="2" project_id="1100">
+            <level_name>Level 2</level_name>
+            <category_text>DCI</category_text>
+          </category>
+          <category id="1129424" group_id="675" level="3" project_id="1100">
+            <level_name>Level 3</level_name>
+            <category_text>1</category_text>
+          </category>
+          <category id="1129433" group_id="675" level="4" project_id="1100">
+            <level_name>Level 4</level_name>
+            <category_text>LS1</category_text>
+          </category>
+          <category id="1129434" group_id="675" level="5" project_id="1100">
+            <level_name>Level 5</level_name>
+            <category_text>A. Structure and Function</category_text>
+          </category>
+          <category id="1129435" group_id="675" level="6" project_id="1100" guid="8E0C8D95-F22F-4AD9-9DA5-1833240808A0">
+            <level_name>Level 6</level_name>
+            <category_text>DCI.1-LS1.A.1. All organisms have external parts. Different animals use their body parts in different ways to see, hear, grasp objects, protect themselves, move from place to place, and seek, find, and take in food, water and air. Plants also have different parts (roots, stems, leaves, flowers, fruits) that help them survive and grow. (1-LS1-1)</category_text>
+          </category>
+        </alignment>
+      </alignments>
+
+       <attribute_set>
+        <attribute_specification id="350" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="01 – Phase" description="01 – Phase">
+          <attribute_value object_id="831087" association_id="350" value_id="1842">I</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="351" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="02 – Batch" description="02 – Batch">
+          <attribute_value object_id="831087" association_id="351" value_id="1847">1</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="345" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="03 - Subject area" description="03- Subject area">
+          <attribute_value object_id="831087" association_id="345" value_id="1811">K-8 Life</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="333" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="04 - Grade" description="04 - Grade">
+          <attribute_value object_id="831087" association_id="333" value_id="1650">1</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="352" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="09 – Test Form" description="09 – Test Form">
+          <attribute_value object_id="831087" association_id="352" value_id="1858">EOY</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="346" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="10 - Depth of Knowledge: Science" description="10 - Depth of Knowledge: Science">
+          <attribute_value object_id="831087" association_id="346" value_id="1823">DOK 2: Skills and Concepts</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="338" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="11 - Bloom's Cognitive Level – Traditional" description="11 - Bloom's Cognitive Level – Traditional">
+          <attribute_value object_id="831087" association_id="338" value_id="1774">3. Bloom's Traditional: Application</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="339" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="12 - Bloom's Cognitive Level – Revised" description="12 - Bloom's Cognitive Level – Revised">
+          <attribute_value object_id="831087" association_id="339" value_id="1780">3. Bloom's Revised: Applying</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="340" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="13 - Student level" description="13 - Student level">
+          <attribute_value object_id="831087" association_id="340" value_id="1785">Average</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="341" object_type="Item" data_type="String" value_type="Closed" allow_multiples="False" data_size="0" is_required="False" name="16 - Engineering" description="16 - Engineering">
+          <attribute_value object_id="831087" association_id="341" value_id="1788">No</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="320" object_type="Item" data_type="String" value_type="Open" allow_multiples="False" data_size="0" is_required="False" name="Audio Script" description="Audio Script">
+          <attribute_value object_id="831087" association_id="320" value_id="-1">The picture shows a porcupine. (PAUSE) Its body is covered in sharp quills. How do the quills help the porcupine? Choose the correct answer. (PAUSE) A. They store water. (PAUSE) B. They keep other animals away. (PAUSE) C. They help the porcupine stay cool in summer.</attribute_value>
+        </attribute_specification>
+        <attribute_specification id="321" object_type="Item" data_type="String" value_type="Open" allow_multiples="False" data_size="0" is_required="False" name="Editorial: Egregious – language" description="Editorial: Egregious – language">
+          <attribute_value object_id="831087" association_id="321" value_id="-1">2</attribute_value>
+        </attribute_specification>
+      </attribute_set>
+      <test_usage>
+        <test_info test_id="19731" test_name="G1 EOY Modified" item_position="1" />
+      </test_usage>
+      <media_files>
+        <media_file id="12345.mp3" description="" mime_type="audio/mpeg" source_file_name="765159177.mp3" />
+      </media_files>
+    </item>
