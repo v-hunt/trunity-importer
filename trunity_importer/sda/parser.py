@@ -36,7 +36,8 @@ class Parser(object):
                 text = distractor_tag.display_text.string.strip()
                 correct = True if distractor_tag['is_correct'] == "True" else False
                 score = 1 if correct else 0
-                feedback = distractor_tag.rationale.string.strip()
+                feedback = distractor_tag.rationale.string.strip() \
+                    if distractor_tag.rationale.string else ""
 
                 answers.append(
                     Answer(text, correct, score, feedback)
@@ -53,6 +54,7 @@ class Parser(object):
 
     def get_questions(self):
         for item in self._soup.find_all("item"):
+            type_, question = None, None
             if item['type'] == 'MultipleChoice':
                 type_ = QuestionType.MULTIPLE_CHOICE
                 question = self._get_multiple_choice(item)
