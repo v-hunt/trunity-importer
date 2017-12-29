@@ -70,4 +70,5 @@ class Parser(object):
                 )
                 print('\tUnknown question type: ', item['type'])
 
-            yield {'type': type_, 'question': question}
+            if type_ is not None and question is not None:
+                yield {'type': type_, 'question': question}

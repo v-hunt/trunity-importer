@@ -9,7 +9,7 @@ from trunity_3_client.clients.endpoints import (
 from trunity_3_client.builders import Questionnaire
 
 
-from trunity_importer.sda.parser import Parser, QuestionType
+from trunity_importer.sda.parser import Parser, QuestionType, MultipleChoice
 from trunity_importer.utils import create_qst_pool
 
 
@@ -51,18 +51,32 @@ class Importer(object):
             the result will be 'bla-bla'
         """
         file_name = self._zip_file.filename
-        return file_name.split("/").replace('.zip', '')
+        return file_name.split("/")[-1].replace('.zip', '')
 
-    # def _upload_images(self, question_soup: BeautifulSoup):
-    #     """
-    #     Upload all images to Trunity and replace src attributes with new urls.
-    #     """
-    #     for img in question_soup.find_all("img"):
-    #         file_obj = self._zip_file.open('testitems/' + img['src'])
-    #         cdn_file_url = self._files_client.list.post(file_obj=file_obj)
-    #         img['src'] = cdn_file_url
-    #
-    #     return question_soup
+    def _upload_images(self, html: str):
+        """
+        Upload all images to Trunity and replace src attributes with new urls.
+        """
+        def fix_image_src(image_path: str) -> str:
+            # TODO: fix the case with "\\"
+            return image_path.replace("\\", "/") + ".gif"
+
+        soup = BeautifulSoup(html, "lxml")
+        for img in soup.find_all("img"):
+            image_src = fix_image_src(img['src'])
+            file_obj = self._zip_file.open(image_src)
+            cdn_file_url = self._files_client.list.post(file_obj=file_obj)
+            img['src'] = cdn_file_url
+
+        return str(soup)
+
+    def _upload_images_in_question(self, question: MultipleChoice):
+        question.text = self._upload_images(question.text)
+
+        for answer in question.answers:
+            answer.text = self._upload_images(answer.text)
+
+        return question
 
     def perform_import(self):
 
@@ -82,6 +96,9 @@ class Importer(object):
         questionnaire = Questionnaire(self.t3_json_session)
 
         for question in parser.get_questions():
+            question['question'] = self._upload_images_in_question(
+                question['question']
+            )
 
             if question['type'] == QuestionType.MULTIPLE_CHOICE:
                 questionnaire.add_multiple_choice(
