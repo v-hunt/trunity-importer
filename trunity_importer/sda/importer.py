@@ -58,7 +58,6 @@ class Importer(object):
         Upload all images to Trunity and replace src attributes with new urls.
         """
         def fix_image_src(image_path: str) -> str:
-            # TODO: fix the case with "\\"
             return image_path.replace("\\", "/") + ".gif"
 
         soup = BeautifulSoup(html, "lxml")
@@ -68,7 +67,7 @@ class Importer(object):
             cdn_file_url = self._files_client.list.post(file_obj=file_obj)
             img['src'] = cdn_file_url
 
-        return str(soup)
+        return soup.decode()
 
     def _upload_images_in_question(self, question: MultipleChoice):
         question.text = self._upload_images(question.text)
