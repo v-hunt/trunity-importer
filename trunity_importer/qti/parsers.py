@@ -216,7 +216,7 @@ class Question(object):
             return QuestionType.MULTIPLE_ANSWER
 
         elif self.__check_short_answer():
-            return  QuestionType.SHORT_ANSWER
+            return QuestionType.SHORT_ANSWER
 
         else:
             warnings.warn(
