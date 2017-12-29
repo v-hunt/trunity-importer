@@ -42,6 +42,17 @@ class Importer(object):
             if file_name.startswith('XML_Export') and file_name.endswith('.xml'):
                 return file_name
 
+    def questionnaire_name(self) -> str:
+        """
+        Construct questionnaire name from zip file full path.
+
+        Example:
+            if full_path is '/home/username/bla-bla.zip',
+            the result will be 'bla-bla'
+        """
+        file_name = self._zip_file.filename
+        return file_name.split("/").replace('.zip', '')
+
     # def _upload_images(self, question_soup: BeautifulSoup):
     #     """
     #     Upload all images to Trunity and replace src attributes with new urls.
@@ -64,7 +75,7 @@ class Importer(object):
         questionnaire_id = create_qst_pool(
             session=self.t3_session,
             site_id=self._book_id,
-            content_title=xml_file_name.replace('.xml', ''),
+            content_title=self.questionnaire_name(),
             topic_id=self._topic_id,
         )
 
