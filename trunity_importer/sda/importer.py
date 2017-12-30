@@ -1,3 +1,4 @@
+import os
 from zipfile import ZipFile
 
 from bs4 import BeautifulSoup
@@ -11,6 +12,12 @@ from trunity_3_client.builders import Questionnaire
 
 from trunity_importer.sda.parser import Parser, QuestionType, MultipleChoice
 from trunity_importer.utils import create_qst_pool
+
+
+QUESTION_TEXT_TEMPLATE = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),  # current file dir
+    'templates/question.html'
+)
 
 
 class Importer(object):
@@ -33,6 +40,9 @@ class Importer(object):
             username, password, content_type='application/json')
 
         self._topic_id = topic_id
+
+        with open(QUESTION_TEXT_TEMPLATE) as fo:
+            self._question_text_templ = fo.read()
 
     def _get_xml_file_name(self):
         """
@@ -69,11 +79,36 @@ class Importer(object):
 
         return soup.decode()
 
+    def _upload_mp3_file(self, name: str) -> str:
+        src = 'media/' + name
+        file_obj = self._zip_file.open(src)
+        return self._files_client.list.post(file_obj=file_obj)
+
     def _upload_images_in_question(self, question: MultipleChoice):
         question.text = self._upload_images(question.text)
 
         for answer in question.answers:
             answer.text = self._upload_images(answer.text)
+
+        return question
+
+    def _add_audio_file_to_question(self, question: MultipleChoice):
+        mp3_source = self._upload_mp3_file(question.audio_file)
+
+        question.text = self._question_text_templ.format(
+            mp3_source=mp3_source,
+            question_text=question.text
+        )
+        return question
+
+    def _handle_question(self, question: MultipleChoice):
+        handlers = [
+            self._upload_images_in_question,
+            self._add_audio_file_to_question,
+        ]
+
+        for handler in handlers:
+            question = handler(question)
 
         return question
 
@@ -95,7 +130,7 @@ class Importer(object):
         questionnaire = Questionnaire(self.t3_json_session)
 
         for question in parser.get_questions():
-            question['question'] = self._upload_images_in_question(
+            question['question'] = self._handle_question(
                 question['question']
             )
 
