@@ -3,7 +3,39 @@
 import argparse
 
 from trunity_importer.utils import check_and_get_creds
-from trunity_importer.qti import Importer
+from trunity_importer.qti import Importer as QtiImporter
+from trunity_importer.sda import Importer as SdaImporter
+
+
+def import_qti(args):
+    """
+    Import QTI assessments.
+    """
+    creds = check_and_get_creds()
+    book_id = input('Site id you want to import to: ')
+
+    QtiImporter(
+        username=creds.username,
+        password=creds.password,
+        book_id=int(book_id),
+        path_to_zip=args.zip_file,
+    ).perform_import()
+
+
+def import_sda(args):
+    """
+    Import Science Dimensions Assessments.
+    """
+    creds = check_and_get_creds()
+    book_id = input('Site id you want to import to: ')
+
+    SdaImporter(
+        username=creds.username,
+        password=creds.password,
+        book_id=int(book_id),
+        path_to_zip=args.zip_file,
+        topic_id=None,  # TODO: implement custom topic id
+    ).perform_import()
 
 
 arg_parser = argparse.ArgumentParser()
@@ -12,20 +44,12 @@ subparsers = arg_parser.add_subparsers(help='Available importers')
 
 qti_parser = subparsers.add_parser('qti', help='Imports QTI zip file')
 qti_parser.add_argument('zip_file')
+qti_parser.set_defaults(func=import_qti)
 
-CREDS = check_and_get_creds()
+sda_parser = subparsers.add_parser('sda', help="Science Dimensions Assessments")
+sda_parser.add_argument('zip_file')
+sda_parser.set_defaults(func=import_sda)
 
 args = arg_parser.parse_args()
-
-
-book_id = input('Site id you want to import to: ')
-
-Importer(
-    username=CREDS.username,
-    password=CREDS.password,
-    book_id=int(book_id),
-    path_to_zip=args.zip_file,
-).perform_import()
-
-
+args.func(args)
 
