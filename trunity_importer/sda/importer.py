@@ -20,48 +20,15 @@ QUESTION_TEXT_TEMPLATE = os.path.join(
 )
 
 
-class Importer(object):
-    """
-    Import Science Dimensions Assessments to Trunity.
-    """
+class QuestionHandler:
 
-    def __init__(self, username: str, password: str, book_id: int,
-                 path_to_zip: str, topic_id=None):
-
-        self._book_id = book_id
-        self._zip_file = ZipFile(path_to_zip)
-        self.t3_session = initialize_session_from_creds(username, password)
-
-        self._topic_client = TopicsClient(self.t3_session)
-        self._files_client = FilesClient(self.t3_session)
-
-        # we need json content type for uploading questionnaires:
-        self.t3_json_session = initialize_session_from_creds(
-            username, password, content_type='application/json')
-
-        self._topic_id = topic_id
+    def __init__(self, files_client: FilesClient,
+                 zip_file: ZipFile):
+        self._files_client = files_client
+        self._zip_file = zip_file
 
         with open(QUESTION_TEXT_TEMPLATE) as fo:
             self._question_text_templ = fo.read()
-
-    def _get_xml_file_name(self):
-        """
-        Pattern is XML_Export_DDDD.xml
-        """
-        for file_name in self._zip_file.namelist():
-            if file_name.startswith('XML_Export') and file_name.endswith('.xml'):
-                return file_name
-
-    def questionnaire_name(self) -> str:
-        """
-        Construct questionnaire name from zip file full path.
-
-        Example:
-            if full_path is '/home/username/bla-bla.zip',
-            the result will be 'bla-bla'
-        """
-        file_name = self._zip_file.filename
-        return file_name.split("/")[-1].replace('.zip', '')
 
     def _upload_images(self, html: str):
         """
@@ -101,7 +68,7 @@ class Importer(object):
         )
         return question
 
-    def _handle_question(self, question: MultipleChoice):
+    def handle(self, question: MultipleChoice):
         handlers = [
             self._upload_images_in_question,
             self._add_audio_file_to_question,
@@ -111,6 +78,51 @@ class Importer(object):
             question = handler(question)
 
         return question
+
+
+class Importer(object):
+    """
+    Import Science Dimensions Assessments to Trunity.
+    """
+
+    def __init__(self, username: str, password: str, book_id: int,
+                 path_to_zip: str, topic_id=None):
+
+        self._book_id = book_id
+        self._zip_file = ZipFile(path_to_zip)
+        self.t3_session = initialize_session_from_creds(username, password)
+
+        self._topic_client = TopicsClient(self.t3_session)
+
+        # we need json content type for uploading questionnaires:
+        self.t3_json_session = initialize_session_from_creds(
+            username, password, content_type='application/json')
+
+        self._question_handler = QuestionHandler(
+            files_client=FilesClient(self.t3_session),
+            zip_file=self._zip_file
+        )
+
+        self._topic_id = topic_id
+
+    def _get_xml_file_name(self):
+        """
+        Pattern is XML_Export_DDDD.xml
+        """
+        for file_name in self._zip_file.namelist():
+            if file_name.startswith('XML_Export') and file_name.endswith('.xml'):
+                return file_name
+
+    def questionnaire_name(self) -> str:
+        """
+        Construct questionnaire name from zip file full path.
+
+        Example:
+            if full_path is '/home/username/bla-bla.zip',
+            the result will be 'bla-bla'
+        """
+        file_name = self._zip_file.filename
+        return file_name.split("/")[-1].replace('.zip', '')
 
     def perform_import(self):
 
@@ -130,7 +142,8 @@ class Importer(object):
         questionnaire = Questionnaire(self.t3_json_session)
 
         for question in parser.get_questions():
-            question['question'] = self._handle_question(
+            # handle question (upload media files etc..):
+            question['question'] = self._question_handler.handle(
                 question['question']
             )
 
