@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='trunity_importer',
-    version='0.2.1',
+    version='0.2.2',
     packages=find_packages(),
     scripts=['trunity_importer/bin/trunity-importer'],
     install_requires=[

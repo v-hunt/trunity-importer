@@ -36,6 +36,9 @@ class QuestionHandler:
             cdn_file_url = self._files_client.list.post(file_obj=file_obj)
             img['src'] = cdn_file_url
 
+            # add some padding for nicer look:
+            img["style"] = "padding: 5px;"
+
         return soup.decode()
 
     def _upload_mp3_file(self, name: str) -> str:
