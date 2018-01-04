@@ -24,6 +24,11 @@ class ParserTestCase(TestCase):
         ) as fo:
             cls.multiple_choice_xml = fo.read()
 
+        with open(
+                os.path.join(DATA_DIR, 'XML_Export_sample.xml')
+        ) as fo:
+            cls.xml_export_sample = fo.read()
+
     def test__get_multiple_choice(self):
         tag = BeautifulSoup(self.multiple_choice_xml, "xml")
         question = Parser._get_multiple_choice(tag)
@@ -73,3 +78,17 @@ class ParserTestCase(TestCase):
             self.assertTrue(
                 isinstance(question['question'], MultipleChoice),
             )
+
+    def test_questionnaire_titles(self):
+        parser = Parser(self.xml_export_sample)
+
+        self.assertDictEqual(
+            parser.questionnaire_titles,
+            {
+                '111': 'Questionnaire 1',
+                '222': 'Questionnaire 2',
+                '333': 'Questionnaire 3',
+                '444': 'Questionnaire 4',
+            },
+            "Wrong questionnaire titles!"
+        )

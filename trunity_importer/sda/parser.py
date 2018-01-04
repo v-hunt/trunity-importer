@@ -29,6 +29,12 @@ class Parser(object):
     def __init__(self, xml: str):
         self._soup = BeautifulSoup(xml, "xml")
 
+        self._questionnaire_titles = self._get_questionnaire_titles()
+
+    @property
+    def questionnaire_titles(self):
+        return self._questionnaire_titles
+
     @staticmethod
     def _get_multiple_choice(tag: Tag) -> MultipleChoice:
         text = tag.display_text.string.strip()
@@ -80,3 +86,23 @@ class Parser(object):
 
             if type_ is not None and question is not None:
                 yield {'type': type_, 'question': question}
+
+    def _get_questionnaire_titles(self) -> dict:
+        """
+        Return dict with test_id's as keys
+        and questionnaire titles as values.
+        """
+        res = {}
+
+        # print(str(self._soup))
+        for tag in self._soup.find_all("test"):
+            res[tag['test_id']] = tag['student_facing_title']
+        return res
+
+    def get_questionnaire_title(self, test_id: str) -> str:
+        """
+        Get questionnaire title by test_id.
+
+        You can treat test_id as questionnaire id in the xml.
+        """
+        return self._questionnaire_titles[test_id]
