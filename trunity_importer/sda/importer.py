@@ -65,14 +65,16 @@ class Importer(object):
 
         parser = Parser(xml)
 
-        questionnaire_id = create_qst_pool(
-            session=self.t3_session,
-            site_id=self._book_id,
-            content_title=self.questionnaire_name(),
-            topic_id=self._topic_id,
-        )
+        questionnaires = {}  # key: test_id, value: Questionnaire inst
 
-        questionnaire = Questionnaire(self.t3_json_session)
+        def get_or_create_questionnaire(test_id: str) -> Questionnaire:
+            if test_id in questionnaires:
+                return questionnaires[test_id]
+
+            else:
+                questionnaire = Questionnaire(self.t3_json_session)
+                questionnaires[test_id] = questionnaire
+                return questionnaire
 
         for question in parser.get_questions():
             # handle question (upload media files etc..):
@@ -80,10 +82,23 @@ class Importer(object):
                 question['question']
             )
 
+            test_id = question['question'].test_id
+
+            questionnaire = get_or_create_questionnaire(test_id)
+
             if question['type'] == QuestionType.MULTIPLE_CHOICE:
                 questionnaire.add_multiple_choice(
                     question['question'].text,
                     question['question'].answers,
                 )
 
-        questionnaire.upload(questionnaire_id)
+        # uploading questionnaires:
+        for test_id, questionnaire in questionnaires.items():
+            questionnaire_id = create_qst_pool(
+                session=self.t3_session,
+                site_id=self._book_id,
+                content_title=parser.get_questionnaire_title(test_id),
+                topic_id=self._topic_id,
+            )
+
+            questionnaire.upload(questionnaire_id)
