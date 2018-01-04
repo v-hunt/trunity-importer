@@ -19,7 +19,7 @@ class Importer(object):
     """
 
     def __init__(self, username: str, password: str, book_id: int,
-                 path_to_zip: str, topic_id=None):
+                 path_to_zip: str):
 
         self._book_id = book_id
         self._zip_file = ZipFile(path_to_zip)
@@ -35,8 +35,6 @@ class Importer(object):
             files_client=FilesClient(self.t3_session),
             zip_file=self._zip_file
         )
-
-        self._topic_id = topic_id
 
     def _get_xml_file_name(self):
         """
@@ -100,11 +98,18 @@ class Importer(object):
             if title == "":
                 title = "NO TITLE!"
 
+            topic_id = input(
+                "\nEnter the topic id you want the QP be attached to. "
+                "Leave blank for the root topic\n"
+                "The title of QP: {}\n".format(title)
+            ).strip()
+            topic_id = topic_id if topic_id != "" else None
+
             questionnaire_id = create_qst_pool(
                 session=self.t3_session,
                 site_id=self._book_id,
                 content_title=title,
-                topic_id=self._topic_id,
+                topic_id=topic_id,
             )
 
             questionnaire.upload(questionnaire_id)

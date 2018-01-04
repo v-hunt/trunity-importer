@@ -34,7 +34,6 @@ def import_sda(args):
         password=creds.password,
         book_id=int(book_id),
         path_to_zip=args.zip_file,
-        topic_id=None,  # TODO: implement custom topic id
     ).perform_import()
 
 
