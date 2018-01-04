@@ -93,7 +93,7 @@ class Parser(object):
         and questionnaire titles as values.
         """
         return {
-            tag['test_id']: tag['student_facing_title']
+            tag['test_id']: tag['student_facing_title'].strip()
             for tag in self._soup.find_all("test")
         }
 

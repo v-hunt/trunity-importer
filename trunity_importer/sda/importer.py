@@ -94,10 +94,16 @@ class Importer(object):
 
         # uploading questionnaires:
         for test_id, questionnaire in questionnaires.items():
+
+            title = parser.get_questionnaire_title(test_id)
+
+            if title == "":
+                title = "NO TITLE!"
+
             questionnaire_id = create_qst_pool(
                 session=self.t3_session,
                 site_id=self._book_id,
-                content_title=parser.get_questionnaire_title(test_id),
+                content_title=title,
                 topic_id=self._topic_id,
             )
 
