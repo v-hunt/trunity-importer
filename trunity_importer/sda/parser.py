@@ -108,4 +108,4 @@ class Parser(object):
             test_name = self._soup.find("test", test_id=test_id)['test_name']
             title = "test_name: " + test_name
 
-        return title
+        return title + " - Question Pool"
