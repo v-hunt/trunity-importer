@@ -103,4 +103,9 @@ class Parser(object):
 
         You can treat test_id as questionnaire id in the xml.
         """
-        return self._questionnaire_titles[test_id]
+        title = self._questionnaire_titles[test_id]
+        if not title:
+            test_name = self._soup.find("test", test_id=test_id)['test_name']
+            title = "test_name: " + test_name
+
+        return title
