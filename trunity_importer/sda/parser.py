@@ -15,10 +15,13 @@ class MultipleChoice:
     Container for parsed MultipleChoice question.
     """
 
-    def __init__(self, text: str, answers: List[Answer], audio_file: str):
+    def __init__(self, text: str, answers: List[Answer],
+                 audio_file: str, test_id: str):
         self.text = text
         self.answers = answers
         self.audio_file = audio_file
+        self.test_id = test_id
+
 
 
 class Parser(object):
@@ -45,11 +48,13 @@ class Parser(object):
             return answers
 
         audio_file = tag.media_file['id']
+        test_id = tag.test_usage.test_info['test_id']
 
         return MultipleChoice(
             text=text,
             answers=get_answers(),
             audio_file=audio_file,
+            test_id=test_id,
         )
 
     def get_questions(self):
