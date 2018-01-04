@@ -92,12 +92,10 @@ class Parser(object):
         Return dict with test_id's as keys
         and questionnaire titles as values.
         """
-        res = {}
-
-        # print(str(self._soup))
-        for tag in self._soup.find_all("test"):
-            res[tag['test_id']] = tag['student_facing_title']
-        return res
+        return {
+            tag['test_id']: tag['student_facing_title']
+            for tag in self._soup.find_all("test")
+        }
 
     def get_questionnaire_title(self, test_id: str) -> str:
         """
