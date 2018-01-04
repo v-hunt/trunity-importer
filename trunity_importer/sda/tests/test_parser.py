@@ -49,12 +49,17 @@ class ParserTestCase(TestCase):
             "12345.mp3",
             "Wrong audio file for MultipleChoice question!"
         )
-        print("test_id: ", question.test_id)
 
         self.assertEqual(
             question.test_id,
             '12345',
             "Wrong test_id for MultipleChoice question!"
+        )
+
+        self.assertEqual(
+            question.item_position,
+            1,
+            "Wrong item_position for MultipleChoice question!"
         )
 
     def test_get_questions(self):

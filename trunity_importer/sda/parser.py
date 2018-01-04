@@ -16,12 +16,12 @@ class MultipleChoice:
     """
 
     def __init__(self, text: str, answers: List[Answer],
-                 audio_file: str, test_id: str):
+                 audio_file: str, test_id: str, item_position: int):
         self.text = text
         self.answers = answers
         self.audio_file = audio_file
         self.test_id = test_id
-
+        self.item_position = item_position
 
 
 class Parser(object):
@@ -49,12 +49,15 @@ class Parser(object):
 
         audio_file = tag.media_file['id']
         test_id = tag.test_usage.test_info['test_id']
+        item_position = tag.test_usage.test_info['item_position']
+        # TODO: it possible that some of questions are in wrong order. Use `item_position` for sorting them.
 
         return MultipleChoice(
             text=text,
             answers=get_answers(),
             audio_file=audio_file,
             test_id=test_id,
+            item_position=int(item_position),
         )
 
     def get_questions(self):
