@@ -25,6 +25,7 @@ class Parser(object):
     @staticmethod
     def _get_multiple_choice(item_tag: Tag) -> MultipleChoice:
         text = item_tag.display_text.string.strip()
+        item_id = int(item_tag['id'])
 
         def get_answers():
             answers = []
@@ -46,7 +47,7 @@ class Parser(object):
             else:
                 warnings.warn(
                     "Audio file wasn't found for item with id {}".format(
-                        item_tag['id']
+                        item_id
                     )
                 )
 
@@ -60,6 +61,7 @@ class Parser(object):
             audio_file=get_audio_file(),
             test_id=test_id,
             item_position=int(item_position),
+            item_id=item_id,
         )
 
     def get_questions(self):

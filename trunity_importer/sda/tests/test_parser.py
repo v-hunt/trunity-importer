@@ -31,7 +31,7 @@ class ParserTestCase(TestCase):
             cls.xml_export_sample = fo.read()
 
     def test__get_multiple_choice(self):
-        tag = BeautifulSoup(self.multiple_choice_xml, "xml")
+        tag = BeautifulSoup(self.multiple_choice_xml, "xml").find('item')
         question = Parser._get_multiple_choice(tag)
 
         self.assertEqual(
@@ -66,6 +66,12 @@ class ParserTestCase(TestCase):
             question.item_position,
             1,
             "Wrong item_position for MultipleChoice question!"
+        )
+
+        self.assertEqual(
+            question.item_id,
+            831087,
+            "Wrong item_id for MultipleChoice question!"
         )
 
     def test_get_questions(self):
