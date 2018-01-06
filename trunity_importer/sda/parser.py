@@ -36,12 +36,12 @@ class Parser(object):
         return self._questionnaire_titles
 
     @staticmethod
-    def _get_multiple_choice(tag: Tag) -> MultipleChoice:
-        text = tag.display_text.string.strip()
+    def _get_multiple_choice(item_tag: Tag) -> MultipleChoice:
+        text = item_tag.display_text.string.strip()
 
         def get_answers():
             answers = []
-            for distractor_tag in tag.distractors.find_all("distractor"):
+            for distractor_tag in item_tag.distractors.find_all("distractor"):
                 text = distractor_tag.display_text.string.strip()
                 correct = True if distractor_tag['is_correct'] == "True" else False
                 score = 1 if correct else 0
@@ -54,17 +54,17 @@ class Parser(object):
             return answers
 
         def get_audio_file() -> Union[str, None]:
-            if tag.media_file:
-                return tag.media_file['id']
+            if item_tag.media_file:
+                return item_tag.media_file['id']
             else:
                 warnings.warn(
                     "Audio file wasn't found for item with id {}".format(
-                        tag['id']
+                        item_tag['id']
                     )
                 )
 
-        test_id = tag.test_usage.test_info['test_id']
-        item_position = tag.test_usage.test_info['item_position']
+        test_id = item_tag.test_usage.test_info['test_id']
+        item_position = item_tag.test_usage.test_info['item_position']
         # TODO: it possible that some of questions are in wrong order. Use `item_position` for sorting them.
 
         return MultipleChoice(
