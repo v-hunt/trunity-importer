@@ -98,5 +98,5 @@ class ParserTestCase(TestCase):
 
         self.assertEqual(
             parser.get_questionnaire_title('444'),
-            "test_name: Test Name"
+            "test_name: Test Name" + " - Question Pool"
         )
