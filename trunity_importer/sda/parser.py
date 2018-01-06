@@ -1,27 +1,14 @@
 import warnings
-from typing import List, Union
+from typing import Union
 
 from bs4 import BeautifulSoup, Tag
 
 from trunity_3_client.builders import Answer
 
-
-class QuestionType:
-    MULTIPLE_CHOICE = 'multiple_choice'
-
-
-class MultipleChoice:
-    """
-    Container for parsed MultipleChoice question.
-    """
-
-    def __init__(self, text: str, answers: List[Answer],
-                 audio_file: str, test_id: str, item_position: int):
-        self.text = text
-        self.answers = answers
-        self.audio_file = audio_file
-        self.test_id = test_id
-        self.item_position = item_position
+from trunity_importer.sda.question_containers import (
+    MultipleChoice,
+    QuestionType,
+)
 
 
 class Parser(object):

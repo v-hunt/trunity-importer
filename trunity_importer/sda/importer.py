@@ -8,7 +8,8 @@ from trunity_3_client.clients.endpoints import (
 from trunity_3_client.builders import Questionnaire
 
 
-from trunity_importer.sda.parser import Parser, QuestionType
+from trunity_importer.sda.parser import Parser
+from trunity_importer.sda.question_containers import QuestionType
 from trunity_importer.sda.question_handler import QuestionHandler
 from trunity_importer.utils import create_qst_pool
 

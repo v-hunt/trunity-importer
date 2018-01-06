@@ -4,7 +4,7 @@ from zipfile import ZipFile
 from bs4 import BeautifulSoup
 from trunity_3_client import FilesClient
 
-from trunity_importer.sda.parser import MultipleChoice
+from trunity_importer.sda.question_containers import MultipleChoice
 
 QUESTION_TEXT_TEMPLATE = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir

@@ -4,8 +4,9 @@ from unittest import TestCase
 from bs4 import BeautifulSoup
 from trunity_3_client.builders import Answer
 
-from trunity_importer.sda.parser import Parser, QuestionType, MultipleChoice
-
+from trunity_importer.sda.parser import Parser
+from trunity_importer.sda.question_containers import MultipleChoice
+from trunity_importer.sda import QuestionType
 
 DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir
