@@ -47,11 +47,13 @@ class QuestionHandler:
         return self._files_client.list.post(file_obj=file_obj)
 
     def _upload_images_in_question(self, question: MultipleChoice):
+        print("Uploading images for question...", end='')
         question.text = self._upload_images(question.text)
 
         for answer in question.answers:
             answer.text = self._upload_images(answer.text)
 
+        print("\t\t Success!")
         return question
 
     def _add_audio_file_to_question(self, question: MultipleChoice):
