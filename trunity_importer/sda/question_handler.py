@@ -55,12 +55,13 @@ class QuestionHandler:
         return question
 
     def _add_audio_file_to_question(self, question: MultipleChoice):
-        mp3_source = self._upload_mp3_file(question.audio_file)
+        if question.audio_file:
+            mp3_source = self._upload_mp3_file(question.audio_file)
 
-        question.text = self._question_text_templ.format(
-            mp3_source=mp3_source,
-            question_text=question.text
-        )
+            question.text = self._question_text_templ.format(
+                mp3_source=mp3_source,
+                question_text=question.text
+            )
         return question
 
     def handle(self, question: MultipleChoice):

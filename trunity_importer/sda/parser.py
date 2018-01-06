@@ -1,5 +1,5 @@
 import warnings
-from typing import List
+from typing import List, Union
 
 from bs4 import BeautifulSoup, Tag
 
@@ -53,7 +53,16 @@ class Parser(object):
                 )
             return answers
 
-        audio_file = tag.media_file['id']
+        def get_audio_file() -> Union[str, None]:
+            if tag.media_file:
+                return tag.media_file['id']
+            else:
+                warnings.warn(
+                    "Audio file wasn't found for item with id {}".format(
+                        tag['id']
+                    )
+                )
+
         test_id = tag.test_usage.test_info['test_id']
         item_position = tag.test_usage.test_info['item_position']
         # TODO: it possible that some of questions are in wrong order. Use `item_position` for sorting them.
@@ -61,7 +70,7 @@ class Parser(object):
         return MultipleChoice(
             text=text,
             answers=get_answers(),
-            audio_file=audio_file,
+            audio_file=get_audio_file(),
             test_id=test_id,
             item_position=int(item_position),
         )
