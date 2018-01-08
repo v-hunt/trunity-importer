@@ -66,9 +66,8 @@ class Parser(object):
 
     def get_questions(self):
         for item in self._soup.find_all("item"):
-            type_, question = None, None
+            question = None
             if item['type'] == 'MultipleChoice':
-                type_ = QuestionType.MULTIPLE_CHOICE
                 question = self._get_multiple_choice(item)
 
             elif item['type'] == 'TechnologyEnhanced':
@@ -82,8 +81,8 @@ class Parser(object):
                 )
                 print('\tUnknown question type: ', item['type'])
 
-            if type_ is not None and question is not None:
-                yield {'type': type_, 'question': question}
+            if question is not None:
+                yield question
 
     def _get_questionnaire_titles(self) -> dict:
         """

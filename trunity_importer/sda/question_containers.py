@@ -20,3 +20,4 @@ class MultipleChoice:
         self.test_id = test_id
         self.item_position = item_position
         self.item_id = item_id  # question id in xml
+        self.type = QuestionType.MULTIPLE_CHOICE

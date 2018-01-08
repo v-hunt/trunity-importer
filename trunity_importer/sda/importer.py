@@ -66,18 +66,16 @@ class Importer(object):
 
         for question in parser.get_questions():
             # handle question (upload media files etc..):
-            question['question'] = self._question_handler.handle(
-                question['question']
-            )
+            question = self._question_handler.handle(question)
 
-            test_id = question['question'].test_id
+            test_id = question.test_id
 
             questionnaire = get_or_create_questionnaire(test_id)
 
-            if question['type'] == QuestionType.MULTIPLE_CHOICE:
+            if question.type == QuestionType.MULTIPLE_CHOICE:
                 questionnaire.add_multiple_choice(
-                    question['question'].text,
-                    question['question'].answers,
+                    question.text,
+                    question.answers,
                 )
 
         # uploading questionnaires:
