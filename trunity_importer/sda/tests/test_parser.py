@@ -79,11 +79,11 @@ class ParserTestCase(TestCase):
 
         for question in parser.get_questions():
             self.assertEqual(
-                question['type'],
+                question.type,
                 QuestionType.MULTIPLE_CHOICE,
             )
             self.assertTrue(
-                isinstance(question['question'], MultipleChoice),
+                isinstance(question, MultipleChoice),
             )
 
     def test_questionnaire_titles(self):
