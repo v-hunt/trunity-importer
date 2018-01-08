@@ -45,17 +45,6 @@ class Importer(object):
             if file_name.startswith('XML_Export') and file_name.endswith('.xml'):
                 return file_name
 
-    def questionnaire_name(self) -> str:
-        """
-        Construct questionnaire name from zip file full path.
-
-        Example:
-            if full_path is '/home/username/bla-bla.zip',
-            the result will be 'bla-bla'
-        """
-        file_name = self._zip_file.filename
-        return file_name.split("/")[-1].replace('.zip', '')
-
     def perform_import(self):
 
         xml_file_name = self._get_xml_file_name()
