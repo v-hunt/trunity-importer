@@ -12,6 +12,7 @@ from trunity_importer.sda.parser import Parser
 from trunity_importer.sda.question_containers import QuestionType
 from trunity_importer.sda.question_handler import QuestionHandler
 from trunity_importer.utils import create_qst_pool
+from trunity_importer.sda.question_checkers import correct_question
 
 
 class Importer(object):
@@ -65,18 +66,22 @@ class Importer(object):
                 return questionnaire
 
         for question in parser.get_questions():
-            # handle question (upload media files etc..):
-            question = self._question_handler.handle(question)
+            # checking if question is correct:
+            is_correct = correct_question(question)
 
-            test_id = question.test_id
+            if is_correct:
+                # handle question (upload media files etc..):
+                question = self._question_handler.handle(question)
 
-            questionnaire = get_or_create_questionnaire(test_id)
+                test_id = question.test_id
 
-            if question.type == QuestionType.MULTIPLE_CHOICE:
-                questionnaire.add_multiple_choice(
-                    question.text,
-                    question.answers,
-                )
+                questionnaire = get_or_create_questionnaire(test_id)
+
+                if question.type == QuestionType.MULTIPLE_CHOICE:
+                    questionnaire.add_multiple_choice(
+                        question.text,
+                        question.answers,
+                    )
 
         # uploading questionnaires:
         for test_id, questionnaire in questionnaires.items():
