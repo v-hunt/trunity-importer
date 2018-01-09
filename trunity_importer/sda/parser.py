@@ -7,6 +7,7 @@ from trunity_3_client.builders import Answer
 
 from trunity_importer.sda.question_containers import (
     MultipleChoice,
+    Essay,
     QuestionType,
 )
 
@@ -64,11 +65,43 @@ class Parser(object):
             item_id=item_id,
         )
 
+    @staticmethod
+    def _get_essay(item_tag: Tag) -> Essay:
+        text = item_tag.item_text.string.strip()
+        correct_answer = item_tag.rubric_text.string.strip()
+        item_id = int(item_tag['id'])
+
+        def get_audio_file() -> Union[str, None]:
+            if item_tag.media_file:
+                return item_tag.media_file['id']
+            else:
+                warnings.warn(
+                    "Audio file wasn't found for item with id {}".format(
+                        item_id
+                    )
+                )
+
+        test_id = item_tag.test_usage.test_info['test_id']
+        item_position = item_tag.test_usage.test_info['item_position']
+
+        return Essay(
+            text=text,
+            correct_answer=correct_answer,
+            audio_file=get_audio_file(),
+            test_id=test_id,
+            item_position=int(item_position),
+            item_id=item_id,
+        )
+
     def get_questions(self):
         for item in self._soup.find_all("item"):
             question = None
             if item['type'] == 'MultipleChoice':
                 question = self._get_multiple_choice(item)
+
+            elif item['type'] == 'ConstructedResponse':
+                # we treat ConstructedResponse as Trunity Essay:
+                question = self._get_essay(item)
 
             elif item['type'] == 'TechnologyEnhanced':
                 # we ignore this type of questions as Trunity doesn't

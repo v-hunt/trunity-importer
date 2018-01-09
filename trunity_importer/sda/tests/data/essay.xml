@@ -1,0 +1,25 @@
+<item id="831087" item_code="765558570" type="ConstructedResponse" project_id="1100" version="3" last_modification_date="4/28/2017 9:44:00 AM">
+      <item_text><![CDATA[<p>Text</p>]]></item_text>
+      <display_text><![CDATA[<p>Text</p>]]></display_text>
+      <rubrics>
+        <rubric id="74442" is_technology_enhanced="False" version="7">
+          <rubric_title>765558570_Rubric</rubric_title>
+          <rubric_text><![CDATA[<p>Answer</p>]]></rubric_text>
+          <display_text><![CDATA[<p>Answer</p>]]></display_text>
+        </rubric>
+      </rubrics>
+
+      <alignments>
+        <!--We don't use alignments, so this section is blank.-->
+      </alignments>
+      <attribute_set>
+        <!--We don't use attribute section. So this section is blank.-->
+      </attribute_set>
+
+      <test_usage>
+        <test_info test_id="12345" test_name="G5 EOY Modified" item_position="1" />
+      </test_usage>
+      <media_files>
+        <media_file id="12345.mp3" description="" mime_type="audio/mpeg" source_file_name="765558570.mp3" />
+      </media_files>
+    </item>

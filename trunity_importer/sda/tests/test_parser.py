@@ -30,6 +30,11 @@ class ParserTestCase(TestCase):
         ) as fo:
             cls.xml_export_sample = fo.read()
 
+        with open(
+                os.path.join(DATA_DIR, 'essay.xml')
+        ) as fo:
+            cls.essay_xml = fo.read()
+
     def test__get_multiple_choice(self):
         tag = BeautifulSoup(self.multiple_choice_xml, "xml").find('item')
         question = Parser._get_multiple_choice(tag)
@@ -72,6 +77,46 @@ class ParserTestCase(TestCase):
             question.item_id,
             831087,
             "Wrong item_id for MultipleChoice question!"
+        )
+
+    def test__get_essay(self):
+        item_tag = BeautifulSoup(self.essay_xml, "xml").find('item')
+        question = Parser._get_essay(item_tag)
+
+        self.assertEqual(
+            question.text,
+            "<p>Text</p>",
+            "Wrong text for Essay question!"
+        )
+
+        self.assertEqual(
+            question.correct_answer,
+            "<p>Answer</p>",
+            "Wrong answer for Essay question!"
+        )
+
+        self.assertEqual(
+            question.audio_file,
+            "12345.mp3",
+            "Wrong audio file for Essay question!"
+        )
+
+        self.assertEqual(
+            question.test_id,
+            '12345',
+            "Wrong test_id for Essay question!"
+        )
+
+        self.assertEqual(
+            question.item_position,
+            1,
+            "Wrong item_position for Essay question!"
+        )
+
+        self.assertEqual(
+            question.item_id,
+            831087,
+            "Wrong item_id for Essay question!"
         )
 
     def test_get_questions(self):
