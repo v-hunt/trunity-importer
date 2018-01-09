@@ -24,23 +24,12 @@ class Parser(object):
         return self._questionnaire_titles
 
     @staticmethod
-    def _get_multiple_choice(item_tag: Tag) -> MultipleChoice:
+    def _get_gen_meta_info(item_tag: Tag) -> dict:
+        """
+        Parse common information for all types of questions.
+        """
         text = item_tag.display_text.string.strip()
         item_id = int(item_tag['id'])
-
-        def get_answers():
-            answers = []
-            for distractor_tag in item_tag.distractors.find_all("distractor"):
-                text = distractor_tag.display_text.string.strip()
-                correct = True if distractor_tag['is_correct'] == "True" else False
-                score = 1 if correct else 0
-                feedback = distractor_tag.rationale.string.strip() \
-                    if distractor_tag.rationale.string else ""
-
-                answers.append(
-                    Answer(text, correct, score, feedback)
-                )
-            return answers
 
         def get_audio_file() -> Union[str, None]:
             if item_tag.media_file:
@@ -56,41 +45,54 @@ class Parser(object):
         item_position = item_tag.test_usage.test_info['item_position']
         # TODO: it possible that some of questions are in wrong order. Use `item_position` for sorting them.
 
-        return MultipleChoice(
+        return dict(
             text=text,
-            answers=get_answers(),
+            item_id=item_id,
             audio_file=get_audio_file(),
             test_id=test_id,
             item_position=int(item_position),
-            item_id=item_id,
+        )
+
+    @staticmethod
+    def _get_multiple_choice(item_tag: Tag) -> MultipleChoice:
+
+        def get_answers():
+            answers = []
+            for distractor_tag in item_tag.distractors.find_all("distractor"):
+                text = distractor_tag.display_text.string.strip()
+                correct = True if distractor_tag['is_correct'] == "True" else False
+                score = 1 if correct else 0
+                feedback = distractor_tag.rationale.string.strip() \
+                    if distractor_tag.rationale.string else ""
+
+                answers.append(
+                    Answer(text, correct, score, feedback)
+                )
+            return answers
+
+        meta_info = Parser._get_gen_meta_info(item_tag)
+
+        return MultipleChoice(
+            text=meta_info['text'],
+            answers=get_answers(),
+            audio_file=meta_info['audio_file'],
+            test_id=meta_info['test_id'],
+            item_position=meta_info['item_position'],
+            item_id=meta_info['item_id'],
         )
 
     @staticmethod
     def _get_essay(item_tag: Tag) -> Essay:
-        text = item_tag.item_text.string.strip()
         correct_answer = item_tag.rubric_text.string.strip()
-        item_id = int(item_tag['id'])
-
-        def get_audio_file() -> Union[str, None]:
-            if item_tag.media_file:
-                return item_tag.media_file['id']
-            else:
-                warnings.warn(
-                    "Audio file wasn't found for item with id {}".format(
-                        item_id
-                    )
-                )
-
-        test_id = item_tag.test_usage.test_info['test_id']
-        item_position = item_tag.test_usage.test_info['item_position']
+        meta_info = Parser._get_gen_meta_info(item_tag)
 
         return Essay(
-            text=text,
+            text=meta_info['text'],
             correct_answer=correct_answer,
-            audio_file=get_audio_file(),
-            test_id=test_id,
-            item_position=int(item_position),
-            item_id=item_id,
+            audio_file=meta_info['audio_file'],
+            test_id=meta_info['test_id'],
+            item_position=meta_info['item_position'],
+            item_id=meta_info['item_id'],
         )
 
     def get_questions(self):
