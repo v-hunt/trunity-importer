@@ -4,7 +4,7 @@ from zipfile import ZipFile
 from bs4 import BeautifulSoup
 from trunity_3_client import FilesClient
 
-from trunity_importer.sda.question_containers import MultipleChoice
+from trunity_importer.sda.question_containers import MultipleChoice, Essay, Question, QuestionType
 
 QUESTION_TEXT_TEMPLATE = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir
@@ -46,8 +46,8 @@ class QuestionHandler:
         file_obj = self._zip_file.open(src)
         return self._files_client.list.post(file_obj=file_obj)
 
-    def _upload_images_in_question(self, question: MultipleChoice):
-        print("Uploading images for question...", end='')
+    def _upload_images_in_multiple_choice(self, question: MultipleChoice):
+        print("Uploading images for MultipleChoice question...", end='')
         question.text = self._upload_images(question.text)
 
         for answer in question.answers:
@@ -56,7 +56,16 @@ class QuestionHandler:
         print("\t\t Success!")
         return question
 
-    def _add_audio_file_to_question(self, question: MultipleChoice):
+    def _upload_images_in_essay(self, question: Essay):
+        print("Uploading images for Essay question...", end='')
+
+        question.text = self._upload_images(question.text)
+        question.correct_answer = self._upload_images(question.correct_answer)
+
+        print("\t\t Success!")
+        return question
+
+    def _add_audio_file_to_question(self, question: Question):
         if question.audio_file:
             print("Uploading mp3 for question...", end='')
             mp3_source = self._upload_mp3_file(question.audio_file)
@@ -68,11 +77,19 @@ class QuestionHandler:
             print("\t\t Success!")
         return question
 
-    def handle(self, question: MultipleChoice):
-        handlers = [
-            self._upload_images_in_question,
-            self._add_audio_file_to_question,
-        ]
+    def handle(self, question: Question):
+
+        if question.type == QuestionType.MULTIPLE_CHOICE:
+            handlers = [
+                self._upload_images_in_multiple_choice,
+                self._add_audio_file_to_question,
+            ]
+
+        elif question.type == QuestionType.ESSAY:
+            handlers = [
+                self._upload_images_in_essay,
+                self._add_audio_file_to_question,
+            ]
 
         for handler in handlers:
             question = handler(question)

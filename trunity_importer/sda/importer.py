@@ -83,6 +83,13 @@ class Importer(object):
                         question.answers,
                     )
 
+                elif question.type == QuestionType.ESSAY:
+                    questionnaire.add_essay(
+                        text=question.text,
+                        correct_answer=question.correct_answer,
+                        score=1,
+                    )
+
         # uploading questionnaires:
         for test_id, questionnaire in questionnaires.items():
 
