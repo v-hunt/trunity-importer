@@ -13,6 +13,10 @@ from trunity_importer.sda.question_containers import (
 
 
 class Parser(object):
+    """
+    Parser for "XML export file".
+    (File with name in format XML_Export_DDDDD.xml)
+    """
 
     def __init__(self, xml: str):
         self._soup = BeautifulSoup(xml, "xml")
