@@ -140,7 +140,7 @@ class ParserTestCase(TestCase):
                 '111': 'Questionnaire 1',
                 '222': 'Questionnaire 2',
                 '333': 'Questionnaire 3',
-                '444': '',
+                '444': 'Questionnaire 4',
             },
             "Wrong questionnaire titles!"
         )
@@ -150,5 +150,5 @@ class ParserTestCase(TestCase):
 
         self.assertEqual(
             parser.get_questionnaire_title('444'),
-            "test_name: Test Name" + " - Question Pool"
+            "Questionnaire 4" + " - Question Pool"
         )

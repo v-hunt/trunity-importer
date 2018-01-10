@@ -125,7 +125,7 @@ class Parser(object):
         and questionnaire titles as values.
         """
         return {
-            tag['test_id']: tag['student_facing_title'].strip()
+            tag['test_id']: tag['test_name'].strip()
             for tag in self._soup.find_all("test")
         }
 
@@ -136,8 +136,4 @@ class Parser(object):
         You can treat test_id as questionnaire id in the xml.
         """
         title = self._questionnaire_titles[test_id]
-        if not title:
-            test_name = self._soup.find("test", test_id=test_id)['test_name']
-            title = "test_name: " + test_name
-
         return title + " - Question Pool"
