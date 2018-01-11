@@ -4,7 +4,7 @@ from unittest import TestCase
 from bs4 import BeautifulSoup
 from trunity_3_client.builders import Answer
 
-from trunity_importer.sda.parser import Parser, _GradeParser
+from trunity_importer.sda.parser import Parser, _GradeParser, GradeError
 from trunity_importer.sda.question_containers import MultipleChoice
 from trunity_importer.sda import QuestionType
 
@@ -70,14 +70,25 @@ class GradeParserTestCase(TestCase):
         )
 
     def test_grades_available(self):
+        # we don't care about order, so we use sorted here:
         self.assertListEqual(
-            self.parser.grades_available,
-            [
+            sorted(self.parser.grades_available),
+            sorted([
                 "1",
                 "K",
-            ]
+            ])
         )
 
+    def test_grade_is_valid(self):
+        self.assertListEqual(
+            [self.parser.grade_is_valid(grade) for grade in ("1", "K", "KK")],
+            [True, True, False],
+            "grade_is_valid not working!"
+        )
+
+    def test_validate_grade(self):
+        with self.assertRaises(GradeError):
+            self.parser.validate_grade("KK")
 
 
 class ParserTestCase(TestCase):

@@ -12,6 +12,13 @@ from trunity_importer.sda.question_containers import (
 )
 
 
+class GradeError(ValueError):
+    """
+    Raise when there is no such grade exist or with other grade issues.
+    """
+    pass
+
+
 class _GradeParser(object):
     """
     Parse XML export file for Grades.
@@ -90,6 +97,27 @@ class _GradeParser(object):
                 test_ids[test_id] = grade
 
         return test_ids
+
+    def grade_is_valid(self, grade: str) -> bool:
+        """
+        Return True if grade in available grades in XML. False otherwise.
+        """
+        if grade in self.grades_available:
+            return True
+        return False
+
+    def validate_grade(self, grade: str):
+        """
+        Raise GradeError when `grade` not in available grades list.
+        """
+        if not self.grade_is_valid(grade):
+            raise GradeError(
+                "There is no grade {grade}. " +
+                "Grades available: {grades_available}".format(
+                    grade=grade,
+                    grades_available=self.grades_available,
+                )
+            )
 
 
 class Parser(object):
