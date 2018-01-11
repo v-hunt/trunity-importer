@@ -1,4 +1,5 @@
 from zipfile import ZipFile
+from typing import Union
 
 from trunity_3_client.clients.auth import initialize_session_from_creds
 from trunity_3_client.clients.endpoints import (
@@ -38,6 +39,16 @@ class Importer(object):
             zip_file=self._zip_file
         )
 
+        xml_file_name = self._get_xml_file_name()
+        with self._zip_file.open(xml_file_name) as file_obj:
+            xml = file_obj.read()
+
+        self._parser = Parser(xml)
+
+    @property
+    def grades_available(self):
+        return self._parser.grades.grades_available
+
     def _get_xml_file_name(self):
         """
         Pattern is XML_Export_DDDD.xml
@@ -46,26 +57,29 @@ class Importer(object):
             if file_name.startswith('XML_Export') and file_name.endswith('.xml'):
                 return file_name
 
-    def perform_import(self):
-
-        xml_file_name = self._get_xml_file_name()
-        with self._zip_file.open(xml_file_name) as file_obj:
-            xml = file_obj.read()
-
-        parser = Parser(xml)
-
+    def perform_import(self, grade: Union[None, str]=None):
         questionnaires = {}  # key: test_id, value: Questionnaire inst
 
-        def get_or_create_questionnaire(test_id: str) -> Questionnaire:
+        if grade:
+            self._parser.grades.validate_grade(grade)
+
+        def get_or_create_questionnaire(test_id: str) -> Union[Questionnaire, None]:
             if test_id in questionnaires:
                 return questionnaires[test_id]
 
             else:
-                questionnaire = Questionnaire(self.t3_json_session)
-                questionnaires[test_id] = questionnaire
-                return questionnaire
+                if grade:
+                    if self._parser.grades.test_ids[test_id] == grade:
+                        questionnaire = Questionnaire(self.t3_json_session)
+                        questionnaires[test_id] = questionnaire
+                        return questionnaire
 
-        for question in parser.get_questions():
+                else:
+                    questionnaire = Questionnaire(self.t3_json_session)
+                    questionnaires[test_id] = questionnaire
+                    return questionnaire
+
+        for question in self._parser.get_questions():
             # checking if question is correct:
             is_correct = correct_question(question)
 
@@ -77,23 +91,24 @@ class Importer(object):
 
                 questionnaire = get_or_create_questionnaire(test_id)
 
-                if question.type == QuestionType.MULTIPLE_CHOICE:
-                    questionnaire.add_multiple_choice(
-                        question.text,
-                        question.answers,
-                    )
+                if questionnaire:
+                    if question.type == QuestionType.MULTIPLE_CHOICE:
+                        questionnaire.add_multiple_choice(
+                            question.text,
+                            question.answers,
+                        )
 
-                elif question.type == QuestionType.ESSAY:
-                    questionnaire.add_essay(
-                        text=question.text,
-                        correct_answer=question.correct_answer,
-                        score=1,
-                    )
+                    elif question.type == QuestionType.ESSAY:
+                        questionnaire.add_essay(
+                            text=question.text,
+                            correct_answer=question.correct_answer,
+                            score=1,
+                        )
 
         # uploading questionnaires:
         for test_id, questionnaire in questionnaires.items():
 
-            title = parser.get_questionnaire_title(test_id)
+            title = self._parser.get_questionnaire_title(test_id)
 
             if title == "":
                 title = "NO TITLE!"

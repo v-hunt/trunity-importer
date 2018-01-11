@@ -29,12 +29,23 @@ def import_sda(args):
     creds = check_and_get_creds()
     book_id = input('Site id you want to import to: ')
 
-    SdaImporter(
+    importer = SdaImporter(
         username=creds.username,
         password=creds.password,
         book_id=int(book_id),
         path_to_zip=args.zip_file,
-    ).perform_import()
+    )
+
+    grade = input(
+        "Do you want to import specific grade? "
+        "Grades available: " + ', '.join(importer.grades_available) + '\n'
+        "press Enter to import all grades: "
+    ).strip()
+
+    if grade:
+        importer.perform_import(grade)
+    else:
+        importer.perform_import()
 
 
 arg_parser = argparse.ArgumentParser()
