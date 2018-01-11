@@ -4,7 +4,7 @@ from unittest import TestCase
 from bs4 import BeautifulSoup
 from trunity_3_client.builders import Answer
 
-from trunity_importer.sda.parser import Parser
+from trunity_importer.sda.parser import Parser, _GradeParser
 from trunity_importer.sda.question_containers import MultipleChoice
 from trunity_importer.sda import QuestionType
 
@@ -12,6 +12,72 @@ DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir
     'data'
 )
+
+
+class GradeParserTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        assert os.path.isdir(DATA_DIR), "Data directory isn't exist!"
+
+        with open(
+                os.path.join(DATA_DIR, 'XML_Export_sample.xml')
+        ) as fo:
+            cls.xml_export_soup = BeautifulSoup(fo.read(), 'xml')
+
+        cls.parser = _GradeParser(cls.xml_export_soup)
+
+    def test__extract_grade_from_activity_reference(self):
+        test_data = {
+            'SCIDIM_NA18E_OLA_G01U00L00_0033': '1',
+            'SCIDIM_NA18E_OLA_G0KU04L00_0019': 'K',
+            'SCIDIM_NA18E_OLA_G05U00L00_0039': '5',
+            'SCIDIM_NA18E_OLA_G077U00L00_0039': '77',
+            'Wrong data..': None,
+            '': None,
+        }
+
+        result = [self.parser._extract_grade_from_activity_reference(activity_reference)
+                  for activity_reference in test_data.keys()]
+        correct_answers = list(test_data.values())
+
+        self.assertListEqual(
+            result,
+            correct_answers,
+            "Wrong grade extraction!"
+        )
+
+    def test__get_all_activity_references(self):
+        self.assertDictEqual(
+            self.parser._get_all_activity_references(),
+            {
+                '222': 'SCIDIM_NA18E_OLA_G0KU04L00_0019',
+                '111': 'SCIDIM_NA18E_OLA_G01U00L00_0033',
+                '333': '',
+                '444': 'Wrong data..',
+            },
+            "Wrong activity_references!"
+        )
+
+    def test_test_ids(self):
+        self.assertDictEqual(
+            self.parser.test_ids,
+            {
+                "111": "1",
+                "222": "K",
+            },
+            "Wrong test_ids!"
+        )
+
+    def test_grades_available(self):
+        self.assertListEqual(
+            self.parser.grades_available,
+            [
+                "1",
+                "K",
+            ]
+        )
+
 
 
 class ParserTestCase(TestCase):

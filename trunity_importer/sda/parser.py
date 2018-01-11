@@ -1,5 +1,6 @@
+import re
 import warnings
-from typing import Union
+from typing import Union, List
 
 from bs4 import BeautifulSoup, Tag
 
@@ -8,8 +9,87 @@ from trunity_3_client.builders import Answer
 from trunity_importer.sda.question_containers import (
     MultipleChoice,
     Essay,
-    QuestionType,
 )
+
+
+class _GradeParser(object):
+    """
+    Parse XML export file for Grades.
+    """
+
+    def __init__(self, soup: BeautifulSoup):
+        self._soup = soup
+
+        self._test_ids = self._get_test_ids()
+        self._grades_available = list(self.test_ids.values())
+
+    @property
+    def grades_available(self) -> List[str]:
+        """
+        List of all available grades.
+
+        Example:
+            ["1", "K", "21"]
+        """
+        return self._grades_available
+
+    @property
+    def test_ids(self) -> dict:
+        """
+        Dict with test_id as keys, grades as values.
+
+        Example:
+            {
+                "111": "1",
+                "222": "K",
+            },
+        """
+        return self._test_ids
+
+    @staticmethod
+    def _extract_grade_from_activity_reference(activity_reference: str) -> str:
+        """
+        Examples:
+        SCIDIM_NA18E_OLA_G0KU04L00_0019 -> K
+        SCIDIM_NA18E_OLA_G01U00L00_0033 -> 1
+        (should be the character between "SCIDIM_NA18E_OLA_G0" and "U")
+
+        :param activity_reference: activity_reference attribute value
+        :return: grade, for example, '1', '22', 'K' etc
+        """
+        pattern = re.compile(
+            r"^SCIDIM_NA18E_OLA_G0([A-Z,0-9]+)U.+"
+        )
+        match = re.match(pattern, activity_reference)
+
+        if match:
+            return match.groups()[0]
+
+    def _get_all_activity_references(self) -> dict:
+        """
+        Return dict with test_id's as keys
+        and activity_reference attributes as values.
+        """
+        return {
+            tag['test_id']: tag['activity_reference'].strip()
+            for tag in self._soup.find_all("test")
+        }
+
+    def _get_test_ids(self) -> dict:
+        """
+        Dict with test_id as keys, grades as values.
+        """
+        activity_references = self._get_all_activity_references()
+        test_ids = {}
+
+        for test_id, activity_reference in activity_references.items():
+            grade = self._extract_grade_from_activity_reference(
+                activity_reference
+            )
+            if grade is not None:
+                test_ids[test_id] = grade
+
+        return test_ids
 
 
 class Parser(object):
@@ -22,6 +102,7 @@ class Parser(object):
         self._soup = BeautifulSoup(xml, "xml")
 
         self._questionnaire_titles = self._get_questionnaire_titles()
+        self.grades = _GradeParser(self._soup)
 
     @property
     def questionnaire_titles(self):
