@@ -38,7 +38,8 @@ class _GradeParser(object):
         Example:
             ["1", "K", "21"]
         """
-        return self._grades_available
+        unique_grades = set(self._grades_available)
+        return list(unique_grades)
 
     @property
     def test_ids(self) -> dict:
