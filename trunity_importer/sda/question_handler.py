@@ -93,6 +93,11 @@ class QuestionHandler:
                 self._add_audio_file_to_question,
             ]
 
+        elif question.type == QuestionType.MULTIPLE_ANSWER:
+            handlers = [
+                self._add_audio_file_to_question,
+            ]
+
         for handler in handlers:
             question = handler(question)
 
