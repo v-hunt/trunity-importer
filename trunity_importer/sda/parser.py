@@ -150,12 +150,6 @@ class Parser(object):
         def get_audio_file() -> Union[str, None]:
             if item_tag.media_file:
                 return item_tag.media_file['id']
-            else:
-                warnings.warn(
-                    "Audio file wasn't found for item with id {}".format(
-                        item_id
-                    )
-                )
 
         test_id = item_tag.test_usage.test_info['test_id']
         item_position = item_tag.test_usage.test_info['item_position']
