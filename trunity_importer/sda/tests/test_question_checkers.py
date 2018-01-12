@@ -8,21 +8,19 @@ class QuestionCheckersTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        pass
+        cls.true_anwer = Answer('some text', True, 5)
+        cls.false_answer = Answer('some text', False, 0)
 
     def test__all_answers_has_one_true(self):
-        true_anwer = Answer('some text', True, 5)
-        false_answer = Answer('some text', False, 0)
-
         self.assertTrue(
             question_checkers._all_answers_has_one_true(
                 MultipleChoice(
                     text='some text',
                     answers=[
-                        false_answer,
-                        true_anwer,  # !
-                        false_answer,
-                        false_answer,
+                        self.false_answer,
+                        self.true_anwer,  # !
+                        self.false_answer,
+                        self.false_answer,
                     ],
                     audio_file='audio.mp3',
                     test_id='123',
@@ -37,10 +35,10 @@ class QuestionCheckersTestCase(TestCase):
                 MultipleChoice(
                     text='some text',
                     answers=[
-                        false_answer,
-                        true_anwer,  # !
-                        false_answer,
-                        true_anwer,
+                        self.false_answer,
+                        self.true_anwer,
+                        self.false_answer,
+                        self.true_anwer,
                     ],
                     audio_file='audio.mp3',
                     test_id='123',
@@ -55,10 +53,10 @@ class QuestionCheckersTestCase(TestCase):
                 MultipleChoice(
                     text='some text',
                     answers=[
-                        false_answer,
-                        false_answer,  # !
-                        false_answer,
-                        false_answer,
+                        self.false_answer,
+                        self.false_answer,
+                        self.false_answer,
+                        self.false_answer,
                     ],
                     audio_file='audio.mp3',
                     test_id='123',
