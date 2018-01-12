@@ -105,6 +105,12 @@ class Importer(object):
                             score=1,
                         )
 
+                    elif question.type == QuestionType.MULTIPLE_ANSWER:
+                        questionnaire.add_multiple_answer(
+                            text=question.text,
+                            answers=question.answers,
+                        )
+
         # uploading questionnaires:
         for test_id, questionnaire in questionnaires.items():
 

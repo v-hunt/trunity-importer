@@ -78,6 +78,8 @@ class QuestionHandler:
         return question
 
     def handle(self, question: Question):
+        # for other types of questions that are not listed below:
+        handlers = []
 
         if question.type == QuestionType.MULTIPLE_CHOICE:
             handlers = [

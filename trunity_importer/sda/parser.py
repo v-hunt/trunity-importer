@@ -273,9 +273,9 @@ class Parser(object):
                 question = self._get_essay(item)
 
             elif item['type'] == 'TechnologyEnhanced':
-                # we ignore this type of questions as Trunity doesn't
-                # have the functionality at the moment.
-                pass
+                # we only can support MultipleAnswer for this type:
+                if self._is_multiple_answer(item):
+                    question = self._get_multiple_answer(item)
 
             else:
                 warnings.warn(
