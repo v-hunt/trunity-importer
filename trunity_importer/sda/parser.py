@@ -204,8 +204,10 @@ class Parser(object):
 
         Some of TechnologyEnhanced can be treated as MultipleAnswer.
         """
-        text = item_tag.display_text.string.strip()
-        if '"multiple_responses":true' in text and '"type":"mcq"' in text:
+        json_str = item_tag.display_text.string.strip()
+        data = json.loads(json_str)
+        if "multiple_responses" in data and data["multiple_responses"] is True \
+                and "type" in data and data["type"] == "mcq":
             return True
         return False
 

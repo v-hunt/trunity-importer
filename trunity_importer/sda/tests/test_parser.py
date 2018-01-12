@@ -245,7 +245,6 @@ class ParserTestCase(TestCase):
     def test__is_multiple_answer(self):
         item_tag = BeautifulSoup(
             self.tech_enhance_mult_answer_xml, "xml").find('item')
-        print(item_tag)
 
         self.assertTrue(
             Parser._is_multiple_answer(item_tag),
