@@ -1,0 +1,21 @@
+<item id="831087" item_code="765192138" type="TechnologyEnhanced" project_id="1100" version="3" last_modification_date="3/15/2017 4:39:00 PM">
+  <item_text><![CDATA[{technology_enhanced_json}]]></item_text>
+  <display_text><![CDATA[{technology_enhanced_json}]]></display_text>
+  <alignments>
+    <!--We don't use alignments, so this section is blank.-->
+  </alignments>
+  <attribute_set>
+    <!--We don't use attribute section. So this section is blank.-->
+  </attribute_set>
+  <test_usage>
+    <test_info test_id="12345" test_name="G1 MOY Modified" item_position="1" />
+  </test_usage>
+  <learnosity_features>
+    <learnosity_feature id="11106" name="765192138">
+      <learnosity_json><![CDATA[{{"type":"audioplayer","src":"https://webcms.rpclearning.com/MediaFileRenderer.aspx?MediaFileID=18965","format":"mp3"}}]]></learnosity_json>
+    </learnosity_feature>
+  </learnosity_features>
+  <media_files>
+    <media_file id="12345.mp3" description="" mime_type="audio/mpeg" source_file_name="765192138.mp3" />
+  </media_files>
+</item>

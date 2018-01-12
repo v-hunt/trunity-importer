@@ -112,6 +112,18 @@ class ParserTestCase(TestCase):
         ) as fo:
             cls.essay_xml = fo.read()
 
+        with open(
+                os.path.join(DATA_DIR, 'TechnologyEnhancedMultipleAnswer.json')
+        ) as fo:
+            cls.tech_enhance_mult_answer_json = fo.read()
+
+        with open(
+                os.path.join(DATA_DIR, 'TechnologyEnhancedMultipleAnswer.xml')
+        ) as fo:
+            cls.tech_enhance_mult_answer_xml = fo.read().format(
+                technology_enhanced_json=cls.tech_enhance_mult_answer_json,
+            )
+
     def test__get_multiple_choice(self):
         tag = BeautifulSoup(self.multiple_choice_xml, "xml").find('item')
         question = Parser._get_multiple_choice(tag)
@@ -228,4 +240,83 @@ class ParserTestCase(TestCase):
         self.assertEqual(
             parser.get_questionnaire_title('444'),
             "Questionnaire 4" + " - Question Pool"
+        )
+
+    def test__is_multiple_answer(self):
+        item_tag = BeautifulSoup(
+            self.tech_enhance_mult_answer_xml, "xml").find('item')
+        print(item_tag)
+
+        self.assertTrue(
+            Parser._is_multiple_answer(item_tag),
+            "Wrong question type!"
+        )
+
+    def test__get_multiple_answers_data(self):
+
+        def test_text():
+            self.assertEqual(
+                Parser._get_multiple_answers_data(
+                    self.tech_enhance_mult_answer_json)[0],
+                "<p>Question text</p>",
+                "Wrong text for MultipleAnswer!"
+            )
+
+        def test_answers():
+            self.assertListEqual(
+                Parser._get_multiple_answers_data(
+                    self.tech_enhance_mult_answer_json)[1],
+                [
+                    Answer("<p>Answer 1</p>", True, 1, "<p>Feedback 1</p>"),
+                    Answer("<p>Answer 2</p>", False, 0, "<p>Feedback 2</p>"),
+                    Answer("<p>Answer 3</p>", True, 1, "<p>Feedback 3</p>"),
+                ],
+                "Wrong answers for MultipleAnswer!"
+            )
+
+        test_text()
+        test_answers()
+
+    def test__get_multiple_answer(self):
+        tag = BeautifulSoup(self.tech_enhance_mult_answer_xml, "xml").find('item')
+        question = Parser._get_multiple_answer(tag)
+
+        self.assertEqual(
+            question.text,
+            "<p>Question text</p>",
+            "Wrong text for MultipleAnswer question!"
+        )
+
+        self.assertListEqual(
+            question.answers,
+            [
+                Answer("<p>Answer 1</p>", True, 1, "<p>Feedback 1</p>"),
+                Answer("<p>Answer 2</p>", False, 0, "<p>Feedback 2</p>"),
+                Answer("<p>Answer 3</p>", True, 1, "<p>Feedback 3</p>"),
+            ],
+            "Wrong answer for MultipleAnswer question!"
+        )
+
+        self.assertEqual(
+            question.audio_file,
+            "12345.mp3",
+            "Wrong audio file for MultipleAnswer question!"
+        )
+
+        self.assertEqual(
+            question.test_id,
+            '12345',
+            "Wrong test_id for MultipleAnswer question!"
+        )
+
+        self.assertEqual(
+            question.item_position,
+            1,
+            "Wrong item_position for MultipleAnswer question!"
+        )
+
+        self.assertEqual(
+            question.item_id,
+            831087,
+            "Wrong item_id for MultipleAnswer question!"
         )

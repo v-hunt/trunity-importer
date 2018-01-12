@@ -1,0 +1,40 @@
+{
+	"multiple_responses": true,
+	"options": [
+		{
+			"label": "<p>Answer 1</p>",
+			"value": "0"
+		},
+		{
+			"label": "<p>Answer 2</p>",
+			"value": "2"
+		},
+		{
+			"label": "<p>Answer 3</p>",
+			"value": "3"
+		}
+	],
+	"stimulus": "<p>Question text</p>",
+	"type": "mcq",
+	"validation": {
+		"scoring_type": "exactMatch",
+		"valid_response": {
+			"score": 1,
+			"value": [
+				"0",
+				"3"
+			]
+		}
+	},
+	"ui_style": {
+		"type": "horizontal"
+	},
+	"metadata": {
+		"distractor_rationale_response_level": [
+			"<p>Feedback 1</p>",
+			"<p>Feedback 2</p>",
+			"<p>Feedback 3</p>"
+		]
+	},
+	"is_math": true
+}

@@ -1,4 +1,5 @@
 import re
+import json
 import warnings
 from typing import Union, List
 
@@ -8,6 +9,7 @@ from trunity_3_client.builders import Answer
 
 from trunity_importer.sda.question_containers import (
     MultipleChoice,
+    MultipleAnswer,
     Essay,
 )
 
@@ -189,6 +191,55 @@ class Parser(object):
         return MultipleChoice(
             text=meta_info['text'],
             answers=get_answers(),
+            audio_file=meta_info['audio_file'],
+            test_id=meta_info['test_id'],
+            item_position=meta_info['item_position'],
+            item_id=meta_info['item_id'],
+        )
+
+    @staticmethod
+    def _is_multiple_answer(item_tag: Tag):
+        """
+        Check if item tag can be treated as MultipleAnswer.
+
+        Some of TechnologyEnhanced can be treated as MultipleAnswer.
+        """
+        text = item_tag.display_text.string.strip()
+        if '"multiple_responses":true' in text and '"type":"mcq"' in text:
+            return True
+        return False
+
+    @staticmethod
+    def _get_multiple_answers_data(json_str: str):
+        data = json.loads(json_str)
+
+        text = data["stimulus"]
+
+        def get_answers():
+            answers = []
+            for num, option in enumerate(data["options"]):
+                text = option["label"]
+                correct = True if option["value"] in data["validation"]["valid_response"]["value"] else False
+                score = 1 if correct else 0
+                feedback = data["metadata"]["distractor_rationale_response_level"][num] \
+                    if "metadata" in data and "distractor_rationale_response_level" in data["metadata"] else ""
+
+                answers.append(Answer(
+                    text, correct, score, feedback,
+                ))
+            return answers
+
+        return text, get_answers()
+
+    @staticmethod
+    def _get_multiple_answer(item_tag: Tag) -> MultipleAnswer:
+        meta_info = Parser._get_gen_meta_info(item_tag)
+
+        text, answers = Parser._get_multiple_answers_data(meta_info['text'])
+
+        return MultipleAnswer(
+            text=text,
+            answers=answers,
             audio_file=meta_info['audio_file'],
             test_id=meta_info['test_id'],
             item_position=meta_info['item_position'],
