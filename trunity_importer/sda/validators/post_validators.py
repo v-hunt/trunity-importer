@@ -5,6 +5,7 @@ them to Trunity.
 """
 from warnings import warn
 from trunity_importer.sda.question_containers import (
+    Question,
     MultipleChoice,
     MultipleAnswer,
     QuestionType,
@@ -51,7 +52,7 @@ def _all_answers_are_not_false(question: MultipleAnswer) -> bool:
         return False
 
 
-def validate(question: MultipleChoice) -> bool:
+def validate(question: Question) -> bool:
     """
     Check question is correct or not.
     """
