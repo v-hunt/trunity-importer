@@ -49,7 +49,7 @@ def _all_answers_are_not_false(question: MultipleAnswer) -> bool:
         return False
 
 
-def correct_question(question: MultipleChoice) -> bool:
+def validate(question: MultipleChoice) -> bool:
     """
     Check question is correct or not.
     """

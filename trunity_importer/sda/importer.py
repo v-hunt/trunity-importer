@@ -13,7 +13,7 @@ from trunity_importer.sda.parser import Parser
 from trunity_importer.sda.question_containers import QuestionType
 from trunity_importer.sda.question_handler import QuestionHandler
 from trunity_importer.utils import create_qst_pool
-from trunity_importer.sda.validators.post_validators import correct_question
+from trunity_importer.sda.validators.post_validators import validate
 
 
 class Importer(object):
@@ -81,9 +81,9 @@ class Importer(object):
 
         for question in self._parser.get_questions():
             # checking if question is correct:
-            is_correct = correct_question(question)
+            is_valid = validate(question)
 
-            if is_correct:
+            if is_valid:
                 # handle question (upload media files etc..):
                 question = self._question_handler.handle(question)
 
