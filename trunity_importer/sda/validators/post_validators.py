@@ -10,6 +10,7 @@ from trunity_importer.sda.question_containers import (
     MultipleAnswer,
     QuestionType,
 )
+from trunity_importer.sda.warnings import warnings
 
 
 def _all_answers_has_one_true(question: MultipleChoice) -> bool:
@@ -25,10 +26,11 @@ def _all_answers_has_one_true(question: MultipleChoice) -> bool:
     if count_true == 1:
         return True
     else:
-        warn(
-            "Question with id={} has not exactly one True answer!".format(
-                question.item_id)
+        warnings.add(
+            item_id=question.item_id,
+            message="Question has not exactly one True answer!",
         )
+
         return False
 
 
@@ -45,10 +47,11 @@ def _all_answers_are_not_false(question: MultipleAnswer) -> bool:
     if count_true >= 1:
         return True
     else:
-        warn(
-            "Question with id={} has all False answers!".format(
-                question.item_id)
+        warnings.add(
+            item_id=question.item_id,
+            message="Question has all False answers!"
         )
+
         return False
 
 

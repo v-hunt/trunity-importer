@@ -14,6 +14,7 @@ from trunity_importer.sda.question_containers import QuestionType
 from trunity_importer.sda.question_handler import QuestionHandler
 from trunity_importer.utils import create_qst_pool
 from trunity_importer.sda.validators.post_validators import validate
+from trunity_importer.sda.warnings import warnings
 
 
 class Importer(object):
@@ -134,3 +135,5 @@ class Importer(object):
             )
 
             questionnaire.upload(questionnaire_id)
+
+        warnings.print()

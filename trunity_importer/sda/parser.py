@@ -1,6 +1,5 @@
 import re
 import json
-import warnings
 from typing import Union, List
 
 from bs4 import BeautifulSoup, Tag
@@ -13,6 +12,7 @@ from trunity_importer.sda.question_containers import (
     Essay,
 )
 from trunity_importer.sda.validators.pre_validators import validate
+from trunity_importer.sda.warnings import warnings
 
 
 class GradeError(ValueError):
@@ -276,10 +276,10 @@ class Parser(object):
                         question = self._get_multiple_answer(item)
 
                 else:
-                    warnings.warn(
-                        "Question type is unknown!"
+                    warnings.add(
+                        item_id=item['id'],
+                        message="Question type is unknown - {}".format(item['type'])
                     )
-                    print('\tUnknown question type: ', item['type'])
 
             if question is not None:
                 yield question

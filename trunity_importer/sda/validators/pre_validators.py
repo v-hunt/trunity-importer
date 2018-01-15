@@ -3,8 +3,9 @@ Validators that validate questions before parsing.
 They validate "item" tags from Xml_Export_DDDD.xml file before moving them
 to parsing process.
 """
-from warnings import warn
 from bs4 import Tag
+
+from trunity_importer.sda.warnings import warnings
 
 
 def _distractors_tag_exist(item_tag: Tag) -> bool:
@@ -15,9 +16,11 @@ def _distractors_tag_exist(item_tag: Tag) -> bool:
     distractors_tag = item_tag.distractors
 
     if not distractors_tag:
-        warn(
-            'No distractors tag for item with id="{}"'.format(item_tag['id'])
+        warnings.add(
+            item_id=item_tag['id'],
+            message="No distractors tag found!"
         )
+
     return bool(distractors_tag)
 
 
@@ -28,9 +31,11 @@ def _display_text_tag_exist(item_tag: Tag) -> bool:
     display_text_tag = item_tag.display_text
 
     if not display_text_tag:
-        warn(
-            'No display_text tag for item with id="{}"'.format(item_tag['id'])
+        warnings.add(
+            item_id=item_tag['id'],
+            message="No display_text tag found!"
         )
+
     return bool(display_text_tag)
 
 
@@ -41,9 +46,11 @@ def _rubric_tag_exist(item_tag: Tag) -> bool:
     rubric_text_tag = item_tag.rubric_text
 
     if not rubric_text_tag:
-        warn(
-            'No rubric_text tag for item with id="{}"'.format(item_tag['id'])
+        warnings.add(
+            item_id=item_tag['id'],
+            message="No rubric_text tag found!"
         )
+
     return bool(rubric_text_tag)
 
 
