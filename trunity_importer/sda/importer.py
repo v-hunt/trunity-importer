@@ -13,7 +13,7 @@ from trunity_importer.sda.parser import Parser
 from trunity_importer.sda.question_containers import QuestionType
 from trunity_importer.sda.question_handler import QuestionHandler
 from trunity_importer.utils import create_qst_pool
-from trunity_importer.sda.question_checkers import correct_question
+from trunity_importer.sda.validators.question_checkers import correct_question
 
 
 class Importer(object):

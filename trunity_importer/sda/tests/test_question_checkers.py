@@ -5,7 +5,7 @@ from trunity_importer.sda.question_containers import (
     MultipleAnswer,
     Answer,
 )
-from trunity_importer.sda import question_checkers
+from trunity_importer.sda.validators import question_checkers
 
 
 class QuestionCheckersTestCase(TestCase):
