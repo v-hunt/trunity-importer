@@ -5,7 +5,7 @@ from trunity_importer.sda.question_containers import (
     MultipleAnswer,
     Answer,
 )
-from trunity_importer.sda.validators import question_checkers
+from trunity_importer.sda.validators import post_validators
 
 
 class QuestionCheckersTestCase(TestCase):
@@ -17,7 +17,7 @@ class QuestionCheckersTestCase(TestCase):
 
     def test__all_answers_has_one_true(self):
         self.assertTrue(
-            question_checkers._all_answers_has_one_true(
+            post_validators._all_answers_has_one_true(
                 MultipleChoice(
                     text='some text',
                     answers=[
@@ -35,7 +35,7 @@ class QuestionCheckersTestCase(TestCase):
         )
 
         self.assertFalse(
-            question_checkers._all_answers_has_one_true(
+            post_validators._all_answers_has_one_true(
                 MultipleChoice(
                     text='some text',
                     answers=[
@@ -53,7 +53,7 @@ class QuestionCheckersTestCase(TestCase):
         )
 
         self.assertFalse(
-            question_checkers._all_answers_has_one_true(
+            post_validators._all_answers_has_one_true(
                 MultipleChoice(
                     text='some text',
                     answers=[
@@ -72,7 +72,7 @@ class QuestionCheckersTestCase(TestCase):
 
     def test__all_answers_are_not_false(self):
         self.assertTrue(
-            question_checkers._all_answers_are_not_false(
+            post_validators._all_answers_are_not_false(
                 MultipleAnswer(
                     text='some text',
                     answers=[
@@ -90,7 +90,7 @@ class QuestionCheckersTestCase(TestCase):
         )
 
         self.assertFalse(
-            question_checkers._all_answers_are_not_false(
+            post_validators._all_answers_are_not_false(
                 MultipleAnswer(
                     text='some text',
                     answers=[
