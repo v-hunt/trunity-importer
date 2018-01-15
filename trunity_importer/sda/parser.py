@@ -12,6 +12,7 @@ from trunity_importer.sda.question_containers import (
     MultipleAnswer,
     Essay,
 )
+from trunity_importer.sda.validators.pre_validators import validate
 
 
 class GradeError(ValueError):
@@ -259,23 +260,26 @@ class Parser(object):
     def get_questions(self):
         for item in self._soup.find_all("item"):
             question = None
-            if item['type'] == 'MultipleChoice':
-                question = self._get_multiple_choice(item)
+            is_valid = validate(item)
 
-            elif item['type'] == 'ConstructedResponse':
-                # we treat ConstructedResponse as Trunity Essay:
-                question = self._get_essay(item)
+            if is_valid:
+                if item['type'] == 'MultipleChoice':
+                    question = self._get_multiple_choice(item)
 
-            elif item['type'] == 'TechnologyEnhanced':
-                # we only can support MultipleAnswer for this type:
-                if self._is_multiple_answer(item):
-                    question = self._get_multiple_answer(item)
+                elif item['type'] == 'ConstructedResponse':
+                    # we treat ConstructedResponse as Trunity Essay:
+                    question = self._get_essay(item)
 
-            else:
-                warnings.warn(
-                    "Question type is unknown!"
-                )
-                print('\tUnknown question type: ', item['type'])
+                elif item['type'] == 'TechnologyEnhanced':
+                    # we only can support MultipleAnswer for this type:
+                    if self._is_multiple_answer(item):
+                        question = self._get_multiple_answer(item)
+
+                else:
+                    warnings.warn(
+                        "Question type is unknown!"
+                    )
+                    print('\tUnknown question type: ', item['type'])
 
             if question is not None:
                 yield question
