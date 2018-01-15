@@ -1,5 +1,7 @@
 """
 Some items in XMl are "dirty". So we need to check questions for correctness.
+Thise validators check questions after parsing xml and before uploading
+them to Trunity.
 """
 from warnings import warn
 from trunity_importer.sda.question_containers import (
