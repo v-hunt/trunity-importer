@@ -6,8 +6,6 @@ to parsing process.
 from warnings import warn
 from bs4 import Tag
 
-from trunity_importer.sda.question_containers import QuestionType
-
 
 def _distractors_tag_exist(item_tag: Tag) -> bool:
     """
