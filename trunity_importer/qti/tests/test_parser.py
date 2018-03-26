@@ -1,6 +1,8 @@
 from unittest import TestCase
 import os
 
+from bs4 import BeautifulSoup
+
 from trunity_3_client.builders import Answer
 
 from trunity_importer.qti.parsers import (
@@ -12,6 +14,7 @@ from trunity_importer.qti.parsers import (
     EssayParser,
     QuestionType,
     Question,
+    AbstractSpecificQuestionParser,
 )
 
 
@@ -110,6 +113,56 @@ class QuestionnaireMetaInfoParserTestCase(TestCase):
         )
 
 
+class AbstractSpecificQuestionParserTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        assert os.path.isdir(DATA_DIR), "Data directory isn't exist!"
+
+        with open(
+                os.path.join(DATA_DIR, 'question_with_flash_object.xml')) as fo:
+            question_with_flash_xml = fo.read()
+
+        with open(
+                os.path.join(DATA_DIR, 'multiple_choice.xml')) as fo:
+            question_without_flash_xml = fo.read()
+
+        cls.soup_with_flash = BeautifulSoup(question_with_flash_xml, "xml")
+        cls.soup_without_flash = BeautifulSoup(question_without_flash_xml, "xml")
+
+    def test__remove_flash_object(self):
+        result_soup = AbstractSpecificQuestionParser._remove_flash_object(
+            self.soup_with_flash)
+
+        self.assertIsNone(
+            # "object" tag could not be found:
+            result_soup.find('object')
+        )
+
+    def test__contains_flash(self):
+
+        def test_true():
+            self.assertTrue(
+                AbstractSpecificQuestionParser._contains_flash(
+                    self.soup_with_flash)
+            )
+
+        def test_false():
+            self.assertFalse(
+                AbstractSpecificQuestionParser._contains_flash(
+                    self.soup_without_flash)
+            )
+
+        test_true()
+        test_false()
+
+    def test__get_audio_file_name(self):
+        self.assertEqual(
+            AbstractSpecificQuestionParser._get_audio_file_name(self.soup_with_flash),
+            'SFNAT_OA_G1_CT_A_Q20.mp3'
+        )
+
+
 class MultipleChoiceParserTestCase(TestCase):
 
     @classmethod
@@ -195,7 +248,6 @@ class ShortAnswerParserTestCase(TestCase):
             self.parser.get_answer(),
             Answer('10', True, 1),
         )
-
 
 
 class EssayParserTestCase(TestCase):

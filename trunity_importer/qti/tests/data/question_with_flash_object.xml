@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1p1.xsd"
+                identifier="res_-SCI_NA17_OAR_G01U00L00_A_020_EN"
+                title="-SCI_NA17_OAR_G01U00L00_A_020_EN" adaptive="false"
+                timeDependent="false">
+    <responseDeclaration baseType="identifier" cardinality="single"
+                         identifier="RESPONSE">
+        <correctResponse>
+            <value>A2</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="FEEDBACK" cardinality="single"
+                        baseType="identifier"/>
+    <outcomeDeclaration identifier="MAXSCORE" cardinality="single"
+                        baseType="integer"/>
+    <outcomeDeclaration identifier="SCORE" cardinality="single"
+                        baseType="integer"/>
+    <itemBody>
+        <div>
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                    codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
+                    width="60" height="15">
+                <param name="quality" value="high"/>
+                <param name="loop" value="false"/>
+                <param name="play" value="false"/>
+                <param name="wmode" value="transparent"/>
+                <param name="allowScriptAccess" value="always"/>
+                <param name="align" value="top"/>
+                <param name="movie"
+                       value="audio.swf?the_sound=/SFNAT_OA_G1_CT_A_Q20.mp3"/>
+                <param name="bgcolor" value="#FFFFFF"/>
+                <embed name="d12e795SFNAT_OA_G1_CT_A_Q20"
+                       src="audio.swf?the_sound=/SFNAT_OA_G1_CT_A_Q20.mp3"
+                       loop="false" play="false" quality="high"
+                       vmode="transparent" width="60" height="15"
+                       allowScriptAccess="always"
+                       type="application/x-shockwave-flash"
+                       pluginspage="http://www.macromedia.com/go/getflashplayer"/>
+            </object>
+
+
+            <br/>
+            LaToya uses this table to record the results of her investigation.
+            <br/>
+            <img src="SCI_NM12_OAR_G01U00L00_A_EN1_Q07_S7.jpg"
+                 class="assemt_default"
+                 alt="A two-column table. Column 1 at left is labeled String Length with rows for short; medium; long. Column 2 at right is labeled What was heard with three blank rows."
+                 label="A two-column table. Column 1 at left is labeled String Length with rows for short; medium; long. Column 2 at right is labeled What was heard with three blank rows."/>
+            <br/>What question is LaToya investigating?
+            <br/>
+        </div>
+        <choiceInteraction responseIdentifier="RESPONSE" shuffle="false"
+                           maxChoices="1">
+            <simpleChoice identifier="A1">Can a soft sound travel through a
+                string?
+            </simpleChoice>
+            <simpleChoice identifier="A2">How far can sound travel through a
+                string?
+            </simpleChoice>
+            <simpleChoice identifier="A3">How quickly can sound travel through a
+                string?
+            </simpleChoice>
+        </choiceInteraction>
+        <rubricBlock view="scorer">
+            <p>A2</p>
+        </rubricBlock>
+    </itemBody>
+    <responseProcessing
+            template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
