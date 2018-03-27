@@ -25,7 +25,7 @@ class AbstractQuestionnaireParser(ABC):
         return cls(soup)
 
 
-class AbstractSpecificQuestionParser(AbstractQuestionnaireParser):
+class AdobeFlashHandler(object):
     """
     This class contains leverage for Adobe Flash audio content.
     Inherit all concrete question parsers from it.

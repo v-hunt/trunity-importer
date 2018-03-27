@@ -14,7 +14,7 @@ from trunity_importer.qti.parsers import (
     EssayParser,
     QuestionType,
     Question,
-    AbstractSpecificQuestionParser,
+    AdobeFlashHandler,
 )
 
 
@@ -131,7 +131,7 @@ class AbstractSpecificQuestionParserTestCase(TestCase):
         cls.soup_without_flash = BeautifulSoup(question_without_flash_xml, "xml")
 
     def test__remove_flash_object(self):
-        result_soup = AbstractSpecificQuestionParser._remove_flash_object(
+        result_soup = AdobeFlashHandler._remove_flash_object(
             self.soup_with_flash)
 
         self.assertIsNone(
@@ -143,13 +143,13 @@ class AbstractSpecificQuestionParserTestCase(TestCase):
 
         def test_true():
             self.assertTrue(
-                AbstractSpecificQuestionParser._contains_flash(
+                AdobeFlashHandler._contains_flash(
                     self.soup_with_flash)
             )
 
         def test_false():
             self.assertFalse(
-                AbstractSpecificQuestionParser._contains_flash(
+                AdobeFlashHandler._contains_flash(
                     self.soup_without_flash)
             )
 
@@ -158,7 +158,7 @@ class AbstractSpecificQuestionParserTestCase(TestCase):
 
     def test__get_audio_file_name(self):
         self.assertEqual(
-            AbstractSpecificQuestionParser._get_audio_file_name(self.soup_with_flash),
+            AdobeFlashHandler._get_audio_file_name(self.soup_with_flash),
             'SFNAT_OA_G1_CT_A_Q20.mp3'
         )
 
