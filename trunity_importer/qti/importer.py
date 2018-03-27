@@ -17,6 +17,7 @@ from trunity_importer.qti.parsers import (
 from bs4 import BeautifulSoup
 
 from trunity_importer.utils import create_qst_pool
+from trunity_importer.qti.handlers import AdobeFlashHandler
 
 
 class Importer(object):
@@ -53,6 +54,36 @@ class Importer(object):
 
         return question_soup
 
+    def _upload_mp3_file(self, name: str) -> str:
+        print("Uploading mp3 for question...", end='')
+
+        src = 'testitems/' + name
+        file_obj = self._zip_file.open(src)
+        cdn_file = self._files_client.list.post(file_obj=file_obj)
+
+        print("\t\t Success!")
+        return cdn_file
+
+    def handle_flash_audio(self, soup):
+        handler = AdobeFlashHandler(soup)
+
+        player_template = """ 
+        <p>
+            <audio controls>
+              <source src="{mp3_source}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </p>
+        """
+
+        if handler.audio_file_name:
+            cdn_mp3 = self._upload_mp3_file(handler.audio_file_name)
+            player_template = player_template.format(mp3_source=cdn_mp3)
+            handler.replace_flash_tag(markup=player_template)
+            soup = handler.soup
+
+        return soup
+
     def _import_question_pool(self, questionnaire_meta_xml: str):
         questionnaire = Questionnaire(self.t3_json_session)
 
@@ -71,6 +102,7 @@ class Importer(object):
         for xml_file in question_xml_files:  # TODO: extract it
             xml = self._zip_file.open('testitems/' + xml_file)
             question = Question.from_xml(xml)
+            question._soup = self.handle_flash_audio(question._soup)
             question._soup = self._upload_images(question._soup)
 
             if question.type == QuestionType.MULTIPLE_CHOICE:

@@ -9,24 +9,32 @@ class AdobeFlashHandler(object):
 
     def __init__(self, soup: BeautifulSoup):
 
-        # When soup contains flash content, we must get audio file name
-        # and get rid of that block:
+        self._soup = soup
+
+        # When soup contains flash content, we should get audio file name
         if self._contains_flash(soup):
             self._audio_file_name = self._get_audio_file_name(soup)
-            self._soup = self._remove_flash_object(soup)
 
         else:
             self._audio_file_name = ""
-            self._soup = soup
 
     @property
     def audio_file_name(self):
         return self._audio_file_name
 
-    @staticmethod
-    def _remove_flash_object(soup: BeautifulSoup) -> BeautifulSoup:
-        soup.itemBody.find("object").decompose()
-        return soup
+    @property
+    def soup(self):
+        return self._soup
+
+    def replace_flash_tag(self, markup: str):
+        object_tag = self._soup.itemBody.find("object")
+        markup_soup = BeautifulSoup(markup, 'lxml')
+
+        # 'lxml' adds redundant <body> and <html> tags. We remove them:
+        markup_soup.html.unwrap()
+        markup_soup.body.unwrap()
+
+        object_tag.replace_with(markup_soup)
 
     @staticmethod
     def _contains_flash(soup: BeautifulSoup) -> bool:

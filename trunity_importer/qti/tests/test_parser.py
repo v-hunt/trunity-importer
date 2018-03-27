@@ -129,14 +129,18 @@ class AbstractSpecificQuestionParserTestCase(TestCase):
         cls.soup_with_flash = BeautifulSoup(question_with_flash_xml, "xml")
         cls.soup_without_flash = BeautifulSoup(question_without_flash_xml, "xml")
 
-    def test__remove_flash_object(self):
-        result_soup = AdobeFlashHandler._remove_flash_object(
-            self.soup_with_flash)
+    def test_replace_flash_tag(self):
+        markup = "<p>Test <b>String</b></p>"
+        handler = AdobeFlashHandler(self.soup_with_flash)
+        handler.replace_flash_tag(markup=markup)
+        print(handler.soup.prettify())
 
+        # "object" tag could not be found:
         self.assertIsNone(
-            # "object" tag could not be found:
-            result_soup.find('object')
+            handler.soup.find('object')
         )
+        # markup string must be in html:
+        self.assertIn(markup, str(handler.soup))
 
     def test__contains_flash(self):
 
@@ -195,6 +199,7 @@ class MultipleChoiceParserTestCase(TestCase):
 
 
 class MultipleAnswerParserTestCase(TestCase):
+
     @classmethod
     def setUpClass(cls):
         assert os.path.isdir(DATA_DIR), "Data directory isn't exist!"
