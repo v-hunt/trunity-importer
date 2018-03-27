@@ -14,9 +14,8 @@ from trunity_importer.qti.parsers import (
     EssayParser,
     QuestionType,
     Question,
-    AdobeFlashHandler,
 )
-
+from trunity_importer.qti.handlers import AdobeFlashHandler
 
 DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),  # current file dir
