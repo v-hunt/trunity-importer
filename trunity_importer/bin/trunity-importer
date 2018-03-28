@@ -13,13 +13,16 @@ def import_qti(args):
     """
     creds = check_and_get_creds()
     book_id = input('Site id you want to import to: ')
+    topic_id = input(
+        "Enter topic id you want to import to. Leave blank if you want to "
+        "import into the root of the book: ")
 
     QtiImporter(
         username=creds.username,
         password=creds.password,
         book_id=int(book_id),
         path_to_zip=args.zip_file,
-    ).perform_import()
+    ).perform_import(topic_id)
 
 
 def import_sda(args):

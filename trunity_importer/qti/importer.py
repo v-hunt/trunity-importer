@@ -84,7 +84,7 @@ class Importer(object):
 
         return soup
 
-    def _import_question_pool(self, questionnaire_meta_xml: str):
+    def _import_question_pool(self, questionnaire_meta_xml: str, topic_id: int):
         questionnaire = Questionnaire(self.t3_json_session)
 
         meta_info = QuestionnaireMetaInfoParser.from_xml(questionnaire_meta_xml)
@@ -92,7 +92,7 @@ class Importer(object):
 
         if topic not in self._topics:
             print("Creating new topic: {}".format(topic), end='')
-            self._cur_topic_id = self._topic_client.list.post(self._book_id, topic)
+            self._cur_topic_id = self._topic_client.list.post(self._book_id, topic, topic_id)
             self._topics[topic] = self._cur_topic_id
             print('\t\t Done!')
 
@@ -136,7 +136,7 @@ class Importer(object):
         )
         questionnaire.upload(questionnaire_id)
 
-    def perform_import(self):
+    def perform_import(self, topic_id=None):
 
         questionnaire_files = ManifestParser.from_xml(
             self._zip_file.open('imsmanifest.xml')
@@ -144,6 +144,6 @@ class Importer(object):
 
         for questionnaire_file in questionnaire_files:
             questionnaire_meta_xml = self._zip_file.open(questionnaire_file)
-            self._import_question_pool(questionnaire_meta_xml)
+            self._import_question_pool(questionnaire_meta_xml, topic_id)
             questionnaire_meta_xml.close()
 
